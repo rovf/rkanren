@@ -1,0 +1,45 @@
+<%= form_for(@dict) do |f| %>
+  <% if @dict.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dict.errors.count, "error") %> prohibited this dict from being saved:</h2>
+
+      <ul>
+      <% @dict.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :dictname %><br>
+    <%= f.text_field :dictname %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :accessed %><br>
+    <%= f.datetime_select :accessed %>
+  </div>
+  <div class="field">
+    <%= f.label :language %><br>
+    <%= f.text_field :language %>
+  </div>
+  <div class="field">
+    <%= f.label :max_level_kanji %><br>
+    <%= f.number_field :max_level_kanji %>
+  </div>
+  <div class="field">
+    <%= f.label :max_level_kana %><br>
+    <%= f.number_field :max_level_kana %>
+  </div>
+  <div class="field">
+    <%= f.label :max_level_gaigo %><br>
+    <%= f.number_field :max_level_gaigo %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
