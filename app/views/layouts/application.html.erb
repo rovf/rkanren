@@ -5,10 +5,13 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'fusshuhn_32x32.jpg' %>
+
+  <!-- link rel="icon" type="image/jpeg" href="/assets/images/fusshuhn_32x32.jpg" sizes="32x32" --><!--fav-->
 </head>
 <body>
 
 <%= yield %>
-
+<footer><%= link_to 'Contact','/static_pages/contact' %></footer>
 </body>
 </html>

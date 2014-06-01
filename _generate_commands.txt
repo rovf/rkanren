@@ -3,3 +3,5 @@ rails generate scaffold User name:string:index email:string
 rails generate scaffold Dict 'dictname:string{16}:index' user:references accessed:datetime 'language:string{32}' 'max_level_kanji:integer{3}' 'max_level_kana:integer{3}' 'max_level_gaigo:integer{3}'
 
 rails generate controller Home init
+
+rails generate controller StaticPages contact

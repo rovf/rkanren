@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+
+  get 'home/init'
+  get 'static_pages/contact'
+
   resources :dicts
 
   resources :users
