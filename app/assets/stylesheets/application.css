@@ -13,3 +13,33 @@
  *= require_tree .
  *= require_self
  */
+
+a:hover {
+  color:#eefb5c;
+  background-color:#da8a29;
+}
+
+footer {
+  margin-top: 32px;
+  padding-top: 8px;
+}
+
+.centered {
+  text-align:center;
+}
+
+.user_name_entry {
+  color:#2e16e0;
+}
+
+.dict_name_entry {
+  color:#f004bd;
+  background-color:#322462;
+  font-family:"Lucida Console", Monaco, monospace;
+}
+
+.language_field {
+  color:#58cd17;
+  background-color:#322462;
+  font-family:"Lucida Console", Monaco, monospace;
+}

@@ -12,6 +12,11 @@
 <body>
 
 <%= yield %>
-<footer><%= link_to 'Contact','/static_pages/contact' %></footer>
+<footer>
+  <nav class="centered">
+    <%= link_to('Home','/') %>
+    <%= request.fullpath == '/static_pages/contact' ? '' : link_to('Contact','/static_pages/contact') %>
+  </nav>
+</footer>
 </body>
 </html>
