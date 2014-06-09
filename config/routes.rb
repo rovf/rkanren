@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
-  get 'home/init'
-  get 'static_pages/contact'
+  match '/contact', to: 'static_pages#contact', via: 'get'
+  # generates contact_url and contact_path
+  match '/login', to: 'home#login', via: 'get'
 
   resources :dicts
 
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
   root 'home#init'
+  # generates root_url and root_path
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

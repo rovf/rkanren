@@ -1,0 +1,70 @@
+$entry_back: #322462;
+$hr_color:#8b5cd3;
+
+.kanrenlogo {
+  color:#76d661;
+  background-color:#466c34;
+  text-shadow: 2px 2px #5de040;
+  font-size:150%;
+  font-weight:lighter;
+  padding: 0 4px 2px 1px;
+}
+
+/* After an idea by Tomas Theunissen */
+hr.kanren_hr {
+  height:26px; border-style: solid;
+  border-color:$hr_color;
+  border-width: 4px 0 0 0; border-radius: 20px;
+
+  &:before {
+    /* Note: Attributes not inherited from parent (probably
+             because a 'before' element)
+    */
+    display: block; content: ""; height: 30px;
+    margin-top: -34px;
+    border-style: solid;
+    border-color: $hr_color;
+    border-width: 0 0 4px 0; border-radius: 20px;
+  }
+}
+
+a:hover {
+  color:#eefb5c;
+  background-color:#da8a29;
+}
+
+.user_name_entry {
+  color:#2e16e0;
+  background-color:#e8c75e;
+}
+
+.dict_name_entry {
+  color:#f004bd;
+  background-color:$entry_back;
+  font-family:"Lucida Console", Monaco, monospace;
+}
+
+.language_field {
+  color:#58cd17;
+  background-color:$entry_back;
+  font-family:"Lucida Console", Monaco, monospace;
+}
+
+/*
+ 8b5cd3 cfc2aa
+*/
+
+$button_color_outer: #4f37bc;
+
+.kanren_button {
+  color: #c7bae0;
+  background-color: $button_color_outer;
+  background:linear-gradient(to right,$button_color_outer,red,$button_color_outer);
+  min-width:16%;
+  text-align:center;
+  padding:0px;
+  border-color:#8d221b;
+  font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-size:0.8em;
+
+}

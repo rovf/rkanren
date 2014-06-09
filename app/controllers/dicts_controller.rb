@@ -3,8 +3,26 @@ class DictsController < ApplicationController
 
   # GET /dicts
   # GET /dicts.json
+  # If called from within index.html.erb page, params will
+  # contain something like:
+  # "dict"=>{"filter"=>"xxxxxxxxx", "filtertype"=>"regexp"}
+  # Depending on the button clicked, apply_filter or clear_filter
+  # will be present.
   def index
+    @dict ||= Dict.new # clears error list
+    logger.debug('DictsController index: '+params.inspect)
+    if params.has_key?('clear_filter')
+      @filter=''
+    elsif params.has_key?('apply_filter')
+      @filter=params['dict']['filter'].strip
+    else
+      @filter ||= ''
+    end
     @dicts = Dict.all
+    if @filter.length > 0
+      re=params['dict']['filtertype'] == 'regexp' ? @filter : '\\A'+Regexp::escape(@filter)
+      @dicts.select { |d| d.dictname.match(re) }
+    end
   end
 
   # GET /dicts/1
@@ -14,6 +32,7 @@ class DictsController < ApplicationController
 
   # GET /dicts/new
   def new
+    logger.debug('DictsController new: '+params.inspect)
     @dict = Dict.new
   end
 
@@ -22,18 +41,19 @@ class DictsController < ApplicationController
   end
 
   # POST /dicts
-  # POST /dicts.json
   def create
+    logger.debug('DictsController create: '+params.inspect)
+    # Next line needs to be fixed, when we have user authentification
+    dict_params.permit(:user_id,:dictname,:language)
+    dict_params[:user_id]=User.guestid
+    logger.debug('dict_params after:'+dict_params.inspect)
     @dict = Dict.new(dict_params)
-
-    respond_to do |format|
-      if @dict.save
-        format.html { redirect_to @dict, notice: 'Dict was successfully created.' }
-        format.json { render :show, status: :created, location: @dict }
-      else
-        format.html { render :new }
-        format.json { render json: @dict.errors, status: :unprocessable_entity }
-      end
+    @dict.user_id=User.guestid
+    if @dict.save
+      redirect_to @dict, notice: 'Dict was successfully created.'
+    else
+      @dicts=Dict.all # needs to be filtered
+      render :index
     end
   end
 

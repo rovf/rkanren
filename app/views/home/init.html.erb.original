@@ -1,0 +1,27 @@
+<h1 class="centered"><span class="kanrenlogo">rkanren</span></h1>
+<p><strong>This is still work in progress!</strong></p>
+
+<div id="login">
+  <!-- GET /loginform or GET /home/loginform -->
+  <%= form_tag("/login",method:"get", enforce_utf8:true) do %>
+    <p>
+      <%= label_tag(:username,'User ID:') %>
+      <%= text_field_tag(:username, nil, maxlength: 64, size:32, class:"user_name_entry") %>
+    </p>
+    <p>
+      <%= label_tag(:dictionaryname,'Dictionary:') %>
+      <%= text_field_tag(:dictionaryname, nil, maxlength: 64, class:"dict_name_entry") %>
+      &nbsp;/&nbsp;
+      <%= label_tag(:dictionarykind,'Language') %>
+      <%= text_field_tag(:dictionarykind, 'Deutsch', maxlength: 14, size: 14, class: 'language_field') %>
+    </p>
+    <p>
+      <%= submit_tag(value="Create New Dictionary", class: 'kanren_button', name: 'create') %>
+      <%= submit_tag(value="Open/Pick Existing Dictionary", class: 'kanren_button', name: 'open') %>
+    </p>
+  <%  end %>
+  <br>
+  <!-- simple_format turns \n into <br> -->
+  <div class="msg"><%= simple_format(@message) %></div>
+
+</div>

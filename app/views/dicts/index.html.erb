@@ -1,15 +1,59 @@
-<h1>Listing dicts</h1>
+<h1>Choose a <span class="kanrenlogo">rkanren</span> dictionary to work with</h1>
 
+<hr class="kanren_hr">
+
+<h3>Create a new dictionary</h3>
+
+<%= form_for @dict, url: dicts_path, enforce_utf8:true do |d| %>
+
+
+<% if @dict.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@dict.errors.count, "error") %> prohibited this dict from being saved:</h2>
+
+  <ul>
+    <% @dict.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+
+
+  <%= d.label(:dictname,'Dictionary:') %>
+  <%= d.text_field(:dictname, maxlength: 64, class:"dict_name_entry") %>
+  &nbsp;&nbsp;
+  <%= d.label(:language,'Type/Language') %>
+  <%= d.text_field(:language, value: 'Deutsch', maxlength: 14, size: 14, class: 'language_field') %>
+  <%= d.submit(value="CREATE", class: 'kanren_button', name: 'create') %>
+<%  end %>
+
+<hr class="kanren_hr">
+
+<h3>Pick an existing dictionary</h3>
+
+<%= form_tag @dict, url: dicts_path, method: 'get', enforce_utf8:true do %>
+  <%= text_field_tag('filter', @filter, maxlength:64, size:16, class:"dict_name_entry") %>
+  <%= radio_button_tag(:filtertype, 'regexp') %>
+  <%= label_tag :filtertype, 'Regular Expression', value: 'regexp' %>
+  <%= radio_button_tag(:filtertype, 'lefteq', checked:true) %>
+  <%= label_tag :filtertype, 'Starts with...', value: 'lefteq' %>
+  <%= submit_tag(value="FILTER LIST BELOW", class: 'kanren_button', name: 'apply_filter') %>
+  <%= submit_tag(value="CLEAR FILTER", class: 'kanren_button', name: 'clear_filter') %>
+<% end %>
 <table>
   <thead>
     <tr>
       <th>Dictname</th>
-      <th>User</th>
-      <th>Accessed</th>
       <th>Language</th>
+      <th>Accessed</th>
+      <!--
+      <th>User</th>
       <th>Max level kanji</th>
       <th>Max level kana</th>
       <th>Max level gaigo</th>
+      -->
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,15 +62,17 @@
     <% @dicts.each do |dict| %>
       <tr>
         <td><%= dict.dictname %></td>
-        <td><%= dict.user %></td>
-        <td><%= dict.accessed %></td>
         <td><%= dict.language %></td>
+        <td><%= dict.accessed %></td>
+        <!--
+        <td><%= dict.user %></td>
         <td><%= dict.max_level_kanji %></td>
         <td><%= dict.max_level_kana %></td>
         <td><%= dict.max_level_gaigo %></td>
         <td><%= link_to 'Show', dict %></td>
         <td><%= link_to 'Edit', edit_dict_path(dict) %></td>
         <td><%= link_to 'Destroy', dict, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        -->
       </tr>
     <% end %>
   </tbody>
