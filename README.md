@@ -9,7 +9,7 @@
     }
 </style>
 
-# <span class="kanrenlogo_md">rkanren</span> - japanese idiom training
+# <span style="color:#76d661;">rkanren</span> - japanese idiom training
 
 This Ruby-on-Rails application is going to become a web version of [kanren](http://www.fusshuhn.de/sw/kanren/kanren.html)
 
