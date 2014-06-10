@@ -24,7 +24,7 @@
   <%= d.label(:dictname,'Dictionary:') %>
   <%= d.text_field(:dictname, maxlength: 64, class:"dict_name_entry") %>
   &nbsp;&nbsp;
-  <%= d.label(:language,'Type/Language') %>
+  <%= d.label(:language,'Type/Language:') %>
   <%= d.text_field(:language, value: 'Deutsch', maxlength: 14, size: 14, class: 'language_field') %>
   <%= d.submit(value="CREATE", class: 'kanren_button', name: 'create') %>
 <%  end %>
@@ -36,17 +36,18 @@
 <%= form_tag @dict, url: dicts_path, method: 'get', enforce_utf8:true do %>
   <%= text_field_tag('filter', @filter, maxlength:64, size:16, class:"dict_name_entry") %>
   <%= radio_button_tag(:filtertype, 'regexp') %>
-  <%= label_tag :filtertype, 'Regular Expression', value: 'regexp' %>
+  <%= label_tag :filtertype_regexp, 'Contains regular expression...', value: 'regexp' %>
   <%= radio_button_tag(:filtertype, 'lefteq', checked:true) %>
-  <%= label_tag :filtertype, 'Starts with...', value: 'lefteq' %>
+  <%= label_tag :filtertype_lefteq, 'Starts with...', value: 'lefteq' %>
   <%= submit_tag(value="FILTER LIST BELOW", class: 'kanren_button', name: 'apply_filter') %>
   <%= submit_tag(value="CLEAR FILTER", class: 'kanren_button', name: 'clear_filter') %>
 <% end %>
+<br/>
 <table>
   <thead>
     <tr>
       <th>Dictname</th>
-      <th>Language</th>
+      <th>Type</th>
       <th>Accessed</th>
       <!--
       <th>User</th>
@@ -61,7 +62,8 @@
   <tbody>
     <% @dicts.each do |dict| %>
       <tr>
-        <td><%= dict.dictname %></td>
+        <!-- Invoke Dict.show when clicking on dictionary name -->
+        <td><%= link_to(dict.dictname,dict_path(dict)) %></td>
         <td><%= dict.language %></td>
         <td><%= dict.accessed %></td>
         <!--
@@ -77,7 +79,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Dict', new_dict_path %>

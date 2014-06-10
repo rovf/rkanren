@@ -1,4 +1,5 @@
 class Dict < ActiveRecord::Base
+
   belongs_to :user
   validates  :dictname,
              uniqueness: true,
@@ -24,6 +25,34 @@ class Dict < ActiveRecord::Base
     self.max_level_kanji=0
     self.max_level_kana=0
     self.max_level_gaigo=0
+  end
+
+  # Bring inconsistent dict records in a correct state, and purge
+  # illegal entries
+
+  def self.sanitize
+
+    all.each do |d|
+      updatep=false
+      if d.dictname.blank?
+        logger.debug("sanitize: Delete Dict ID "+d.id.to_s)
+        d.destroy
+        logger.error("sanitize: Destroy failed for Dict ID "+d.id.to_s) unless d.destroyed?
+      elsif d.user_id.blank?
+        d.user_id=User.guestid
+        updatep=true
+      elsif d.language.blank?
+        d.language='Steirisch'
+        updatep=true
+      end
+      if updatep
+        logger.debug("sanitize: Update dictionary "+d.dictname)
+        unless d.save
+          logger.debug("sanitize: Update failed for dictionary "+d.dictname)
+        end
+      end
+    end
+
   end
 
 end

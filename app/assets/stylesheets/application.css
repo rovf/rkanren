@@ -14,6 +14,13 @@
  *= require_self
  */
 
+/*  c04c94 */
+
+body {
+  background-color: #5e9d82;
+  font-size: 116%;
+}
+
 footer {
   margin-top: 32px;
   padding-top: 8px;

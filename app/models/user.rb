@@ -20,9 +20,9 @@ class User < ActiveRecord::Base
     while guestuser.nil? && retries > 0
       guestuser=User.new(name: guestname , email:'')
       if guestuser.save
-        logging.debug("Created user "+guestname)
+        logger.debug("Created user "+guestname)
       else
-        logging.debug("Failed to created "+guestname+", retry")
+        logger.debug("Failed to created "+guestname+", retry")
         guestuser=nil
         sleep(2)
         retries-=1

@@ -5,7 +5,7 @@ class DictsController < ApplicationController
   # GET /dicts.json
   # If called from within index.html.erb page, params will
   # contain something like:
-  # "dict"=>{"filter"=>"xxxxxxxxx", "filtertype"=>"regexp"}
+  # "filter"=>"xxxxxxxxx", "filtertype"=>"regexp"
   # Depending on the button clicked, apply_filter or clear_filter
   # will be present.
   def index
@@ -14,15 +14,18 @@ class DictsController < ApplicationController
     if params.has_key?('clear_filter')
       @filter=''
     elsif params.has_key?('apply_filter')
-      @filter=params['dict']['filter'].strip
+      @filter=params['filter'].strip
     else
       @filter ||= ''
     end
     @dicts = Dict.all
     if @filter.length > 0
-      re=params['dict']['filtertype'] == 'regexp' ? @filter : '\\A'+Regexp::escape(@filter)
-      @dicts.select { |d| d.dictname.match(re) }
+      re=params['filtertype'] == 'regexp' ? @filter : '\\A'+Regexp::escape(@filter)
+      logger.debug('Filtering according to '+re.to_s)
+      @dicts=@dicts.select { |d| d.dictname.match(re) }
     end
+    logger.debug('Number of :dict objects selected: '+@dicts.length.to_s)
+    @dicts=@dicts.sort {|d1,d2| d1.dictname <=> d2.dictname }
   end
 
   # GET /dicts/1
@@ -50,9 +53,9 @@ class DictsController < ApplicationController
     @dict = Dict.new(dict_params)
     @dict.user_id=User.guestid
     if @dict.save
-      redirect_to @dict, notice: 'Dict was successfully created.'
+      redirect_to @dict, notice: 'New dictionary'
     else
-      @dicts=Dict.all # needs to be filtered
+      @dicts=Dict.all # needs to be filtered?
       render :index
     end
   end
