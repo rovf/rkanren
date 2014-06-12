@@ -6,6 +6,9 @@
 </p>
 
 <hr class="kanren_hr">
+<%#= button_to 'Add Idiom XXX', {controller: 'cards', action: 'new'}, {method: 'get', class: 'kanren_button'} %>
+<%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button'} %>
+
 <hr class="kanren_hr">
 <hr class="kanren_hr">
 

@@ -1,7 +1,12 @@
-rails generate scaffold User name:string:index email:string 
+rails generate scaffold User name:string:index email:string
 
 rails generate scaffold Dict 'dictname:string{16}:index' user:references accessed:datetime 'language:string{32}' 'max_level_kanji:integer{3}' 'max_level_kana:integer{3}' 'max_level_gaigo:integer{3}'
 
 rails generate controller Home init
 
 rails generate controller StaticPages contact
+
+rails generate model Card dict:references 'n_repres:integer{1}' usernote:text
+rails generate controller Cards new create destroy edit
+
+rails generate model Idiom repres:string{128}:index card:references 'kind:integer{1}' note:text 'level:integer{3}' atari:integer

@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140530140428) do
+ActiveRecord::Schema.define(version: 20140611110952) do
+
+  create_table "cards", force: true do |t|
+    t.integer  "dict_id"
+    t.integer  "n_repres",   limit: 1
+    t.text     "usernote"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cards", ["dict_id"], name: "index_cards_on_dict_id"
 
   create_table "dicts", force: true do |t|
     t.string   "dictname",        limit: 16

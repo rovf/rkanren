@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
 
+#  get 'cards/new'
+#  get 'cards/create'
+#  get 'cards/destroy'
+#  get 'cards/edit'
+
   match '/contact', to: 'static_pages#contact', via: 'get'
   # generates contact_url and contact_path
   match '/login', to: 'home#login', via: 'get'
 
-  resources :dicts
+  resources :dicts do
+    resources :cards
+  end
 
   resources :users
 

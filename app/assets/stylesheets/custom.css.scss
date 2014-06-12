@@ -1,5 +1,8 @@
 $entry_back: #322462;
 $hr_color:#8b5cd3;
+$idiom_fg:#cfc2aa;
+$japanese_font:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+$japanese_mono:"Osaka Monospaced";
 
 .kanrenlogo {
   color:#76d661;
@@ -44,14 +47,29 @@ a:hover {
   font-family:"Lucida Console", Monaco, monospace;
 }
 
+.idiom_entry {
+  color:$idiom_fg;
+  background-color: $entry_back;
+  width:98%;
+}
+
 .language_field {
   color:#58cd17;
   background-color:$entry_back;
   font-family:"Lucida Console", Monaco, monospace;
 }
 
+.optional_entry {
+  background-color: #7a2c77;
+  font-family:$japanese_mono;
+  border-color: #8b5cd3;
+  border-width: 3px;
+  color: $idiom_fg;
+  width: 98%;
+}
+
 /*
- 8b5cd3 cfc2aa
+
 */
 
 $button_color_outer: #4f37bc;
@@ -64,7 +82,6 @@ $button_color_outer: #4f37bc;
   text-align:center;
   padding:0px;
   border-color:#8d221b;
-  font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-family:$japanese_font;
   font-size:0.8em;
-
 }

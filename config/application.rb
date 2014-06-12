@@ -20,4 +20,13 @@ module Rkanren
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
   end
+
+  # Systemwide constants
+
+  # Mapping between kind (id) and kind (string representation)
+  # Access as Rkanren::NAME
+  GAIGO=0
+  KANA=1
+  KANJI=2
+  KIND_REP=['','カナ','漢字']
 end
