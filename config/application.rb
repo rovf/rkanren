@@ -28,5 +28,9 @@ module Rkanren
   GAIGO=0
   KANA=1
   KANJI=2
-  KIND_REP=['','カナ','漢字']
+  NREPS=KANJI+1
+  KINDS=[GAIGO,KANA,KANJI]
+  KIND_PP=['','カナ','漢字']
+  KIND_TXT=['gaigo','kana','kanji']
+  KIND_REP_NOTE=KIND_TXT.map { |s| s+'_notes' }
 end

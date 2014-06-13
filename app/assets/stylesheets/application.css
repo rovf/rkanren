@@ -14,10 +14,11 @@
  *= require_self
  */
 
-/*  c04c94 */
+/*   */
 
 body {
-  background-color: #5e9d82;
+  background-color: #4616e0;
+  color: #af0c6f;
   font-size: 116%;
 }
 
@@ -35,4 +36,13 @@ footer {
   background-repeat:repeat-x;
   min-height:40px;
   color:#b51b03;
+}
+
+.debug_dump {
+  float: left;
+  margin-top: 16px;
+  border-width: 3px;
+  border-color: #c04c94;
+  background-color: #5e9d82;
+  box-sizing: border-box;
 }
