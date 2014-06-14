@@ -1,6 +1,9 @@
 class Dict < ActiveRecord::Base
 
-  belongs_to :user
+  belongs_to  :user
+  has_many    :cards,
+              dependent: :destroy
+
   validates  :dictname,
              uniqueness: true,
              presence: true,

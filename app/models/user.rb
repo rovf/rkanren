@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
 
+  has_many  :dicts,
+            dependent: :destroy
+
   validates :name,
             uniqueness: { case_sensitive: false },
             presence: true,
