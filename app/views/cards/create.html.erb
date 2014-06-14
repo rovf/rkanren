@@ -1,2 +1,7 @@
-<h1>Cards#create</h1>
-<p>Find me in app/views/cards/create.html.erb</p>
+<h2>Added to Dictionary <%= @curent_dictname %>:</h2>
+<% @rep.each do |r| %>
+  <p class="show_rep"><%= r %></p>
+<% end %>
+<hr class="kanren_hr">
+<%= link_to 'Add another one', new_dict_card_path(@dict.id), class:"pseudo_button" %>&nbsp;&nbsp;
+<%= link_to 'Back to control center', dict_path(@dict.id), class: "pseudo_button" %>

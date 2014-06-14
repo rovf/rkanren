@@ -3,6 +3,11 @@ $hr_color:#8b5cd3;
 $idiom_fg:#cfc2aa;
 $japanese_font:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 $japanese_mono:"Osaka Monospaced";
+$button_font_size:0.8em;
+
+/*
+
+*/
 
 .kanrenlogo {
   color:#76d661;
@@ -31,9 +36,14 @@ hr.kanren_hr {
   }
 }
 
-a:hover {
-  color:#eefb5c;
-  background-color:#da8a29;
+a {
+  &:visited {
+    color:#2e9c09;
+  }
+  &:hover {
+    color:#eefb5c;
+    background-color:#da8a29;
+  }
 }
 
 .user_name_entry {
@@ -51,6 +61,7 @@ a:hover {
   color:$idiom_fg;
   background-color: $entry_back;
   width:98%;
+  font-size:3em;
 }
 
 .language_field {
@@ -68,20 +79,64 @@ a:hover {
   width: 98%;
 }
 
-/*
+.show_rep {
+  font-family:$japanese_font;
+  font-size:2em;
+  color:#af0c6f;
+}
 
-*/
+
+$pseubu_horpad: 2em;
+$pseubu_verpad: 2px;
+$pseubu_color_outer1:#f9ac3c;
+$pseubu_color_outer2:#855536;
+.pseudo_button {
+  color: #88701e;
+  background-color: #30ddf5;
+  font-family:$japanese_font;
+  min-width:16em;
+  padding: $pseubu_verpad $pseubu_horpad $pseubu_verpad $pseubu_horpad;
+  font-size:$button_font_size;
+  &:hover {
+    color:#0bc8dd;
+    background-color:$pseubu_color_outer2;
+    background:linear-gradient(to right,$pseubu_color_outer1, $pseubu_color_outer2, #371e19,$pseubu_color_outer2,$pseubu_color_outer1)
+  }
+  &:active {
+    color:#893218;
+  }
+}
 
 $button_color_outer: #4f37bc;
-
+$button_color_inner: red;
 .kanren_button {
   color: #c7bae0;
   background-color: $button_color_outer;
-  background:linear-gradient(to right,$button_color_outer,red,$button_color_outer);
+  background:linear-gradient(to right,$button_color_outer,$button_color_inner,$button_color_outer);
   min-width:16%;
   text-align:center;
   padding:0px;
   border-color:#8d221b;
   font-family:$japanese_font;
-  font-size:0.8em;
+  font-size:$button_font_size;
+  &:hover {
+    background-color: $button_color_inner;
+    background:linear-gradient(to right,$button_color_inner,$button_color_outer, $button_color_inner);
+  }
+  &:active {
+    color:#00bcbc;
+  }
+}
+
+.kanren_button_to {
+  float: left;
+  min-width:20%;
+  .kanren_button {
+    min-width:90%;
+  }
+}
+
+.clear {
+  clear: left;
+  line-height: 0;
 }

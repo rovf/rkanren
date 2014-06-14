@@ -10,15 +10,16 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require rkanren
  *= require_tree .
  *= require_self
- */
+*/
 
 /*   */
 
 body {
   background-color: #4616e0;
-  color: #af0c6f;
+  color: #93bbc9;
   font-size: 116%;
 }
 
@@ -41,7 +42,9 @@ footer {
 .debug_dump {
   float: left;
   margin-top: 16px;
-  border-width: 3px;
+  border-width: 6px;
+  color:#b71e17;
+  border-style: groove;
   border-color: #c04c94;
   background-color: #5e9d82;
   box-sizing: border-box;

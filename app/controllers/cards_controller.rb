@@ -7,7 +7,6 @@ class CardsController < ApplicationController
     @rep=Array.new(Rkanren::NREPS,'')
     @notes=Array.new(Rkanren::NREPS,'')
     @card=Card.new(dict_id:params['dict_id'])
-    logger.debug('======= leaving CardsController.new')
   end
 
   # params:
@@ -26,8 +25,6 @@ class CardsController < ApplicationController
       usernote:params['card']['usernote']||'',
       n_repres:(@rep[Rkanren::KANJI].length == 0 ? 2 : 3))
     if @card.save
-      logger.debug('========New card: '+@card.inspect)
-      @card.destroy # TO BE REMOVED
       @idioms=[]
       @card.n_repres.times do |kind|
         @idioms[kind]=Idiom.new(
@@ -35,15 +32,22 @@ class CardsController < ApplicationController
           card_id: @card.id,
           note: params[Rkanren::KIND_REP_NOTE[kind]],
           atari: 0,
-          level: 0, # TODO: Place in highest level
+          level: 1, # TODO: Place in highest level
           kind: kind)
-        logger.debug('========== New Idiom: '+@idiom.inspect)
-        # TODO: Save and error recovery (REMOVE DESTROY ABOVE)
+        unless @idioms[kind].save
+          logger.debug("Can not save "+Rkanren::KIND_TXT[kind]+"-Idiom object")
+          @card.destroy
+          break
+        end
       end
     else
       logger.debug("can not save Card object")
       render('new')
     end
+  end
+
+  def index
+    logger.debug("CardsController.index "+params.inspect)
   end
 
   def destroy

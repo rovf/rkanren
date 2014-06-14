@@ -1,3 +1,5 @@
+<!-- Dictionary Control Center -->
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -6,10 +8,16 @@
 </p>
 
 <hr class="kanren_hr">
+
 <%#= button_to 'Add Idiom XXX', {controller: 'cards', action: 'new'}, {method: 'get', class: 'kanren_button'} %>
-<%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button'} %>
+<%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+
+<%= button_to 'List Idioms', dict_cards_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+
+<div class="clear"></div> <!-- because button_to uses floating -->
 
 <hr class="kanren_hr">
+
 <hr class="kanren_hr">
 
 <%= link_to 'Change name or type/language', edit_dict_path(@dict) %> |
