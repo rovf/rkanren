@@ -48,6 +48,11 @@ class CardsController < ApplicationController
 
   def index
     logger.debug("CardsController.index "+params.inspect)
+    # Todo: If the dictionary is large, show only the first
+    # page and provide a paging function
+    Card.where(dict_id: params[:dict_id]).map {|c| c.id }.each do |cid|
+
+    end
   end
 
   def destroy
