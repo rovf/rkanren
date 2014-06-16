@@ -50,9 +50,26 @@ class CardsController < ApplicationController
     logger.debug("CardsController.index "+params.inspect)
     # Todo: If the dictionary is large, show only the first
     # page and provide a paging function
-    Card.where(dict_id: params[:dict_id]).map {|c| c.id }.each do |cid|
-
-    end
+    # Note: Instead of card_ids, we can also write pluck(:card_id)
+    # Starting with Rails 4, pluck can even be used to select more
+    # than one column.
+    @idiom_index_list=(@dict||Dict.find(params[:dict_id])).card_ids.map do |cid|
+      # find raises exception, if Object has been deleted in
+      # between. find_by_.... returns nil in this case.
+      card=Card.find_by_id(cid)
+      result=nil
+      if not card.nil?
+        # 'where' returns array
+        iarr=Idiom.where(card_id: cid, kind: Rkanren::GAIGO)
+        if iarr.length > 0
+          result={:card_id => cid, :gaigo => iarr[0].repres}
+        end
+      end
+      result
+    end.select { |i| not i.nil? }
+    # TODO: We should redirect to the dictionary page instead
+    flash.now[:notice]='Dictionary is empty' if @idiom_index_list.length==0
+    logger.debug("index list:\n"+@idiom_index_list.inspect)
   end
 
   def destroy
