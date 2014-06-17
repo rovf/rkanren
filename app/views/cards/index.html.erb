@@ -1,5 +1,5 @@
-<p class="notice"><%= notice %></p>
-
 <% @idiom_index_list.each do |idata| %>
-  <p><%= idata[:gaigo] %></p>
+  <p>
+    <%= link_to(idata[:gaigo],dict_card_url(@dict.id,idata[:card_id])) %>
+  </p>
 <% end %>

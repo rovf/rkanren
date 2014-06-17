@@ -37,12 +37,18 @@ hr.kanren_hr {
 }
 
 a {
+  &:link {
+    color:#1c8607;
+  }
   &:visited {
     color:#2e9c09;
   }
   &:hover {
     color:#eefb5c;
     background-color:#da8a29;
+  }
+  &:active {
+    color:#340fb2;
   }
 }
 

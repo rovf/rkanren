@@ -53,7 +53,8 @@ class CardsController < ApplicationController
     # Note: Instead of card_ids, we can also write pluck(:card_id)
     # Starting with Rails 4, pluck can even be used to select more
     # than one column.
-    @idiom_index_list=(@dict||Dict.find(params[:dict_id])).card_ids.map do |cid|
+    @dict||=Dict.find(params[:dict_id])
+    @idiom_index_list=@dict.card_ids.map do |cid|
       # find raises exception, if Object has been deleted in
       # between. find_by_.... returns nil in this case.
       card=Card.find_by_id(cid)
@@ -67,14 +68,23 @@ class CardsController < ApplicationController
       end
       result
     end.select { |i| not i.nil? }
-    # TODO: We should redirect to the dictionary page instead
-    flash.now[:notice]='Dictionary is empty' if @idiom_index_list.length==0
-    logger.debug("index list:\n"+@idiom_index_list.inspect)
+    if @idiom_index_list.length==0
+      flash[:notice]='The Dictionary is empty'
+      redirect_to dict_url(@dict.id)
+    else
+      logger.debug("index list:\n"+@idiom_index_list.inspect)
+    end
   end
 
   def destroy
   end
 
+  def show
+    @card=Card.find(params[:id])
+    @idioms=@card.idioms(:order => 'kind DESC')
+    logger.debug("CardsController show:"+@idioms.inspect)
+  end
+  
   def edit
   end
 end

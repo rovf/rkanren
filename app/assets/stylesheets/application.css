@@ -22,6 +22,7 @@ body {
   background-color: #4616e0;
   color: #93bbc9;
   font-size: 116%;
+  quotes: "«" "»" "‹" "›";
 }
 
 footer {
@@ -49,4 +50,9 @@ footer {
   border-color: #c04c94;
   background-color: #5e9d82;
   box-sizing: border-box;
+}
+
+.notice {
+  background-color: #40842f !important;
+  quotes: none;
 }

@@ -13,6 +13,7 @@
 
 <%= yield %>
 <footer>
+  <p class="notice"><%= notice %></p>
   <nav class="centered">
     <%= link_to('Home',root_path) %>
     <%= request.fullpath == contact_path ? '' : link_to('Contact',contact_path) %>
