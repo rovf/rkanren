@@ -1,0 +1,233 @@
+@charset "UTF-8";body {
+  background-color: #fff;
+  color: #333;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 18px; }
+
+p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 18px; }
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px; }
+
+a {
+  color: #000; }
+  a:visited {
+    color: #666; }
+  a:hover {
+    color: #fff;
+    background-color: #000; }
+
+div.field, div.actions {
+  margin-bottom: 10px; }
+
+#notice {
+  color: green; }
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table; }
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0; }
+  #error_explanation h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff; }
+  #error_explanation ul li {
+    font-size: 12px;
+    list-style: square; }
+
+/*
+
+*/
+.kanrenlogo {
+  color: #76d661;
+  background-color: #466c34;
+  text-shadow: 2px 2px #5de040;
+  font-size: 150%;
+  font-weight: lighter;
+  padding: 0 4px 2px 1px; }
+
+/* After an idea by Tomas Theunissen */
+hr.kanren_hr {
+  height: 26px;
+  border-style: solid;
+  border-color: #8b5cd3;
+  border-width: 4px 0 0 0;
+  border-radius: 20px; }
+  hr.kanren_hr:before {
+    /* Note: Attributes not inherited from parent (probably
+             because a 'before' element)
+    */
+    display: block;
+    content: "";
+    height: 30px;
+    margin-top: -34px;
+    border-style: solid;
+    border-color: #8b5cd3;
+    border-width: 0 0 4px 0;
+    border-radius: 20px; }
+
+a:link {
+  color: #1c8607; }
+a:visited {
+  color: #2e9c09; }
+a:hover {
+  color: #eefb5c;
+  background-color: #da8a29; }
+a:active {
+  color: #340fb2; }
+
+.user_name_entry {
+  color: #2e16e0;
+  background-color: #e8c75e; }
+
+.dict_name_entry {
+  color: #f004bd;
+  background-color: #322462;
+  font-family: "Lucida Console", Monaco, monospace; }
+
+.idiom_entry {
+  color: #cfc2aa;
+  background-color: #322462;
+  width: 98%;
+  font-size: 3em; }
+
+.language_field {
+  color: #58cd17;
+  background-color: #322462;
+  font-family: "Lucida Console", Monaco, monospace; }
+
+.optional_entry {
+  background-color: #7a2c77;
+  font-family: "Osaka Monospaced";
+  border-color: #8b5cd3;
+  border-width: 3px;
+  color: #cfc2aa;
+  width: 98%; }
+
+.show_rep {
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-size: 2em;
+  color: #af0c6f; }
+
+.pseudo_button {
+  color: #88701e;
+  background-color: #30ddf5;
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  min-width: 16em;
+  padding: 2px 2em 2px 2em;
+  font-size: 0.8em; }
+  .pseudo_button:hover {
+    color: #0bc8dd;
+    background-color: #855536;
+    background: linear-gradient(to right, #f9ac3c, #855536, #371e19, #855536, #f9ac3c); }
+  .pseudo_button:active {
+    color: #893218; }
+
+.kanren_button {
+  color: #c7bae0;
+  background-color: #4f37bc;
+  background: linear-gradient(to right, #4f37bc, red, #4f37bc);
+  min-width: 16%;
+  text-align: center;
+  padding: 0px;
+  border-color: #8d221b;
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-size: 0.8em; }
+  .kanren_button:hover {
+    background-color: red;
+    background: linear-gradient(to right, red, #4f37bc, red); }
+  .kanren_button:active {
+    color: #00bcbc; }
+
+.kanren_button_to {
+  float: left;
+  min-width: 20%; }
+  .kanren_button_to .kanren_button {
+    min-width: 90%; }
+
+.clear {
+  clear: left;
+  line-height: 0; }
+#fhpic {
+  width: 10%;
+  height: 10%;
+  margin-top: 16px;
+  float: right; }
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+
+
+
+
+*/
+
+/*   */
+
+
+body {
+  background-color: #4616e0;
+  color: #93bbc9;
+  font-size: 116%;
+  quotes: "«" "»" "‹" "›";
+}
+
+footer {
+  margin-top: 32px;
+  padding-top: 8px;
+}
+
+.centered {
+  text-align:center;
+}
+
+.msg {
+  background-image:url("gras0.jpg");
+  background-repeat:repeat-x;
+  min-height:40px;
+  color:#b51b03;
+}
+
+.debug_dump {
+  float: left;
+  margin-top: 16px;
+  border-width: 6px;
+  color:#b71e17;
+  border-style: groove;
+  border-color: #c04c94;
+  background-color: #5e9d82;
+  box-sizing: border-box;
+}
+
+.notice {
+  background-color: #40842f !important;
+  quotes: none;
+}
