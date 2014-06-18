@@ -25,12 +25,24 @@ module Rkanren
 
   # Mapping between kind (id) and kind (string representation)
   # Access as Rkanren::NAME
+  # Note: The numbering is NOT arbitrary. The application requests, that
+  # the representation in the own language has code 0, and the optional
+  # representations have the highest numbers. Since we have only three
+  # representations, one of them being opitional, this leaves no other
+  # possibility for numbering them.
   GAIGO=0
   KANA=1
   KANJI=2
-  NREPS=KANJI+1
   KINDS=[GAIGO,KANA,KANJI]
+  NREPS=KINDS.size
+  # How to present a kind to the user.
+  # The application shall NOT assume, that KIND_PP[GAIGO] is the null string.
+  # It *can* assume, that the other KIND_PP elements are NOT the null string.
   KIND_PP=['','カナ','漢字']
+  # How to present a kind in the debug output.
+  # It is guaranteed that all KIND_TXT elements have at least length 1
   KIND_TXT=['gaigo','kana','kanji']
+  # Each representation can have a note attached.
   KIND_REP_NOTE=KIND_TXT.map { |s| s+'_notes' }
+
 end

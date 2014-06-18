@@ -1,1 +1,20 @@
-<%= @card.usernote %>
+<%= form_for [@dict,@card] do |f| %>
+  <div>
+    <p class="kanren_note"><%= @card.usernote %></p>
+  </div>
+  <% @idioms.each do |idi| %> <%# Sorted by KIND %>
+
+    <hr class="kanren_hr">
+    <div>
+      <p><%= idi.repres %></p>
+      <p class="kanren_note"><%= idi.note %></p>
+    </div>
+  <% end %>
+
+  <hr class="kanren_hr">
+
+  <%= f.submit('DELETE', class:'kanren_button', name:'delete', method: :delete, data: { confirm: '本当ですか' }) %> &nbsp;
+  <%# f.submit('EDIT', class:'kanren_button', name:'edit', method: :patch) %> &nbsp;
+  <%= f.submit('LIST ALL', url: dict_cards_path(@dict.id), class:'kanren_button', name:'list_all', method: :get) %>
+
+<% end %>

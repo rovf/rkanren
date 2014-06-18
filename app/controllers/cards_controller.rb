@@ -47,7 +47,6 @@ class CardsController < ApplicationController
   end
 
   def index
-    logger.debug("CardsController.index "+params.inspect)
     # Todo: If the dictionary is large, show only the first
     # page and provide a paging function
     # Note: Instead of card_ids, we can also write pluck(:card_id)
@@ -81,10 +80,11 @@ class CardsController < ApplicationController
 
   def show
     @card=Card.find(params[:id])
-    @idioms=@card.idioms(:order => 'kind DESC')
-    logger.debug("CardsController show:"+@idioms.inspect)
+    @idioms=@card.idioms # .order('kind ASC') .... now done implicitly in model
+    logger.debug("CardsController show (sorted?):"+@idioms.inspect)
+    @dict=Dict.find(@card.dict_id) # Needed for form_for [...]
   end
-  
+
   def edit
   end
 end

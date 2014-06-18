@@ -33,7 +33,9 @@ footer {
 .centered {
   text-align:center;
 }
-
+.kanren_note {
+  background-color: #af3e38;
+}
 .msg {
   background-image:url("gras0.jpg");
   background-repeat:repeat-x;
