@@ -1,52 +1,7 @@
 <h1>Create a new idiom-set</h1>
 
-<%= form_for [@dict,@card] do |f| %>
+<%= render :partial => '/shared/card_form', :locals => {:button_value => "CREATE" } %>
 
-  Dictionary: <%= @dict.dictname %>
-  <p>
-  <%= f.label(:usernote) { 'Notes for this idiom:' } %>
-  <br/>
-  <!-- cols is only used for browsers which don't understand CSS's width
-       attribute
-  -->
-  <%= f.text_area :usernote, class: 'optional_entry', rows: 3, cols: 36 %>
-  </p>
-
-  <hr class="kanren_hr">
-
-  <p>
-    Idiom in your language: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::GAIGO], @rep[Rkanren::GAIGO], maxlength:128, size:32, class:"idiom_entry") %>
-    <br/>
-    Notes:
-    <br/>
-    <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::GAIGO], @notes[Rkanren::GAIGO], class: 'optional_entry', rows: 3, cols: 36) %>
-  </p>
-
-  <hr class="kanren_hr">
-
-  <p>
-    ひらがな／カタカナ: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::KANA], @rep[Rkanren::KANA], maxlength:128, size:32, class:"idiom_entry") %>
-    <br/>
-    Notes:
-    <br/>
-    <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::KANA], @notes[Rkanren::KANA], class: 'optional_entry', rows: 3, cols: 36) %>
-  </p>
-
-  <hr class="kanren_hr">
-
-  <p>
-    漢字: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::KANJI], @rep[Rkanren::KANJI], maxlength:128, size:32, class:"idiom_entry") %>
-    <br/>
-    Notes:
-    <br/>
-    <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::KANJI], @notes[Rkanren::KANJI], class: 'optional_entry', rows: 3, cols: 36) %>
-  </p>
-
-  <hr class="kanren_hr">
-
-  <%= f.submit(value="CREATE", class: 'kanren_button', name: 'create') %>
-
-<%  end  %>
 
 <% errcheck=[@card] %>
 <% errcheck+=@idioms unless @idioms.nil? %>

@@ -13,36 +13,39 @@ class CardsController < ApplicationController
   #  "card"=>{"usernote"=>"AAAAA"}, "gaigo"=>"BBBBBBB",
   #  "gaigo_notes"=>"CCCCCC", ... , "dict_id"=>"4"
   def create
-    logger.debug('CardsController create: '+params.inspect)
     @dict=Dict.find(params['dict_id'])
     @current_dictname=@dict.dictname
-    @rep||=[]
-    Rkanren::NREPS.times do |kind|
-      @rep[kind]=(params[Rkanren::KIND_TXT[kind]]||'').strip
-    end
-    @card=Card.new(
-      dict_id:params['dict_id'],
-      usernote:params['card']['usernote']||'',
-      n_repres:(@rep[Rkanren::KANJI].length == 0 ? 2 : 3))
-    if @card.save
-      @idioms=[]
-      @card.n_repres.times do |kind|
-        @idioms[kind]=Idiom.new(
-          repres: @rep[kind],
-          card_id: @card.id,
-          note: params[Rkanren::KIND_REP_NOTE[kind]],
-          atari: 0,
-          level: 1, # TODO: Place in highest level
-          kind: kind)
-        unless @idioms[kind].save
-          logger.debug("Can not save "+Rkanren::KIND_TXT[kind]+"-Idiom object")
-          @card.destroy
-          break
-        end
-      end
+    if params.has_key?('cancel')
+      redirect_to dict_path(@dict.id)
     else
-      logger.debug("can not save Card object")
-      render('new')
+      @rep||=[]
+      Rkanren::NREPS.times do |kind|
+        @rep[kind]=(params[Rkanren::KIND_TXT[kind]]||'').strip
+      end
+      @card=Card.new(
+        dict_id:params['dict_id'],
+        usernote:params['card']['usernote']||'',
+        n_repres:(@rep[Rkanren::KANJI].length == 0 ? 2 : 3))
+      if @card.save
+        @idioms=[]
+        @card.n_repres.times do |kind|
+          @idioms[kind]=Idiom.new(
+            repres: @rep[kind],
+            card_id: @card.id,
+            note: params[Rkanren::KIND_REP_NOTE[kind]],
+            atari: 0,
+            level: 1, # TODO: Place in highest level
+            kind: kind)
+          unless @idioms[kind].save
+            logger.debug("Can not save "+Rkanren::KIND_TXT[kind]+"-Idiom object")
+            @card.destroy
+            break
+          end
+        end
+      else
+        logger.debug("can not save Card object")
+        render('new')
+      end
     end
   end
 
@@ -86,5 +89,10 @@ class CardsController < ApplicationController
   end
 
   def edit
+    @card=Card.find(params[:id])
+    @dict=Dict.find(@card.dict_id) # Needed for form_for [...]
+    @idioms=@card.idioms
+    @rep=@idioms.map {|i| i.repres }
+    @notes=@idioms.map {|i| i.note }
   end
 end

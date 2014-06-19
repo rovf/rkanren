@@ -1,4 +1,4 @@
-<%= form_for [@dict,@card] do |f| %>
+<%# form_for [@dict,@card] do |f| %>
   <div>
     <p class="kanren_note"><%= @card.usernote %></p>
   </div>
@@ -13,8 +13,11 @@
 
   <hr class="kanren_hr">
 
-  <%= f.submit('DELETE', class:'kanren_button', name:'delete', method: :delete, data: { confirm: '本当ですか' }) %> &nbsp;
-  <%# f.submit('EDIT', class:'kanren_button', name:'edit', method: :patch) %> &nbsp;
-  <%= f.submit('LIST ALL', url: dict_cards_path(@dict.id), class:'kanren_button', name:'list_all', method: :get) %>
+  <%# f.submit('DELETE', class:'kanren_button', name:'delete', method: :delete, data: { confirm: '本当ですか' }) %> &nbsp;
+      <%= link_to 'DELETE', dict_card_path(@dict.id,@card.id) , method: :delete, class: 'pseudo_button', data: { confirm: '本当ですか' } %> &nbsp;
+  <%# f.submit('MODIFY', class:'kanren_button', name:'edit', method: :patch) %> &nbsp;
+      <%= link_to 'EDIT', edit_dict_card_path(@dict.id,@card.id), class: 'pseudo_button' %> &nbsp;
+  <%# f.submit('LIST ALL', url: dict_cards_path(@dict.id), class:'kanren_button', name:'list_all', method: :get) %>
+  <%= link_to 'LIST ALL', dict_cards_path(@dict.id), class: 'pseudo_button' %>
 
-<% end %>
+<%# end %>

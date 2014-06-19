@@ -1,0 +1,62 @@
+<%#
+  The following variables are expected to be passed via :locals => ... :
+  button_value : The string to appear on the button
+  button_name  : The :name parameter for the button. If not supplied,
+                 the lower case version of button_value is used.
+%>
+
+<% button_name ||= button_value.downcase %>
+
+<%= form_for [@dict,@card] do |f| %>
+
+Dictionary: <%= @dict.dictname %>
+<p>
+  <%= f.label(:usernote) { 'Notes for this idiom:' } %>
+  <br/>
+  <!-- cols is only used for browsers which don't understand CSS's width
+attribute
+-->
+  <%= f.text_area :usernote, class: 'optional_entry', rows: 3, cols: 36 %>
+</p>
+
+<hr class="kanren_hr">
+
+<p>
+  Idiom in your language: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::GAIGO], @rep[Rkanren::GAIGO], maxlength:128, size:32, class:"idiom_entry") %>
+  <br/>
+  Notes:
+  <br/>
+  <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::GAIGO], @notes[Rkanren::GAIGO], class: 'optional_entry', rows: 3, cols: 36) %>
+</p>
+
+<hr class="kanren_hr">
+
+<p>
+  ひらがな／カタカナ: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::KANA], @rep[Rkanren::KANA], maxlength:128, size:32, class:"idiom_entry") %>
+  <br/>
+  Notes:
+  <br/>
+  <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::KANA], @notes[Rkanren::KANA], class: 'optional_entry', rows: 3, cols: 36) %>
+</p>
+
+<hr class="kanren_hr">
+
+<p>
+  漢字: <%= text_field_tag(Rkanren::KIND_TXT[Rkanren::KANJI], @rep[Rkanren::KANJI], maxlength:128, size:32, class:"idiom_entry") %>
+  <br/>
+  Notes:
+  <br/>
+  <%= text_area_tag(Rkanren::KIND_REP_NOTE[Rkanren::KANJI], @notes[Rkanren::KANJI], class: 'optional_entry', rows: 3, cols: 36) %>
+</p>
+
+<hr class="kanren_hr">
+
+<%= f.submit(value=button_value, class: 'kanren_button', name: button_name) %>
+
+<%# The action controller has to check, whether cancel has been clicked,
+                   and then redirect appropriately %>
+<%= f.submit(value='CANCEL', class: 'kanren_button', name: 'cancel') %>
+
+<%= link_to 'CANCEL', dict_cards_path(@dict.id), class: 'pseudo_button' %>
+
+<%  end  %>
