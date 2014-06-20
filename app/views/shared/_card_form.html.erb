@@ -54,9 +54,8 @@ attribute
 <%= f.submit(value=button_value, class: 'kanren_button', name: button_name) %>
 
 <%# The action controller has to check, whether cancel has been clicked,
-                   and then redirect appropriately %>
+    and then redirect appropriately
+%>
 <%= f.submit(value='CANCEL', class: 'kanren_button', name: 'cancel') %>
-
-<%= link_to 'CANCEL', dict_cards_path(@dict.id), class: 'pseudo_button' %>
 
 <%  end  %>
