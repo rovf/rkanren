@@ -10,7 +10,9 @@
   <!-- link rel="icon" type="image/jpeg" href="/assets/images/fusshuhn_32x32.jpg" sizes="32x32" --><!--fav-->
 </head>
 <body>
-
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>"><%= value %></div>
+<% end %>
 <%= yield %>
 <footer>
   <p class="notice"><%= notice %></p>
