@@ -28,6 +28,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    bcrypt (3.1.7)
     builder (3.2.2)
     childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
@@ -141,6 +142,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt
   coffee-rails (= 4.0.1)
   jbuilder (~> 2.0)
   jquery-rails (= 3.0.4)

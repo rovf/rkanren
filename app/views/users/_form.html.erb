@@ -1,3 +1,4 @@
+<hr class="kanren_hr">
 <%= form_for(@user) do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
@@ -12,14 +13,21 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.label :name, 'User ID' %>
+    <%= f.text_field :name, class: 'user_mgt_req_entry', maxlength:24, size:24 %>
+    <small>(required, case insensitive)</small>&nbsp; &nbsp; &nbsp;
+    <%= f.label :email %>
+    <%= f.text_field :email, class: 'user_mgt_opt_entry', size:48, maxlength:128 %>
   </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
+  <div class="passfield">
+    <%= f.label :password, 'Password' %>
+    <%= f.password_field :password, class: 'user_mgt_req_entry' %>
+    <small>(required, minimum 4 characters)</small>&nbsp;
+    <%= f.label :password_confirmation, 'Password Confirmation' %>
+    <%= f.password_field :password_confirmation, class: 'user_mgt_req_entry' %><small>(required)</small>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+<hr class="kanren_hr">
+  <div class="centered">
+    <%= f.submit class:'kanren_button' %>
   </div>
 <% end %>

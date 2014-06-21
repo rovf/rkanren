@@ -1,3 +1,15 @@
-// Place all the styles related to the Users controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.user_mgt_entry {
+  border-style: groove;
+  border-color: #bec527;
+  border-width: 8px;
+}
+
+.user_mgt_req_entry {
+  @extend .user_mgt_entry;
+  background-color: #a7c732;
+}
+
+.user_mgt_opt_entry {
+  @extend .user_mgt_entry;
+  background-color:#06fc36;
+}

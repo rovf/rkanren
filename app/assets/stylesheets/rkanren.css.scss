@@ -18,6 +18,26 @@ $button_font_size:0.8em;
   padding: 0 4px 2px 1px;
 }
 
+/* Todo: Simplify this with sass script */
+.rkanim {
+  -webkit-animation: rot 64s infinite;
+  -moz-animation: rot 15s 3;
+  animation: rot 15s 8;
+}
+@-webkit-keyframes rot {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(-720deg);}
+}
+@-moz-keyframes rot {
+  from {-moz-transform: rotate(0deg);}
+  to {-moz-transform: rotate(-180deg);}
+}
+@keyframes rot {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(-180deg);}
+}
+
+
 /* After an idea by Tomas Theunissen */
 hr.kanren_hr {
   height:26px; border-style: solid;
@@ -91,25 +111,29 @@ a {
   color:#af0c6f;
 }
 
-
 $pseubu_horpad: 2em;
 $pseubu_verpad: 2px;
 $pseubu_color_outer1:#f9ac3c;
 $pseubu_color_outer2:#855536;
 .pseudo_button {
-  color: #88701e;
+  color: #0bc8dd;
   background-color: #30ddf5;
   font-family:$japanese_font;
+  border-style: solid;
+  border-widt: 2px;
+  border-color: #afdbb8;
   min-width:16em;
   padding: $pseubu_verpad $pseubu_horpad $pseubu_verpad $pseubu_horpad;
   font-size:$button_font_size;
   &:hover {
-    color:#0bc8dd;
+    color:#893218;
+    border-color: #c9c9f0;
     background-color:$pseubu_color_outer2;
     background:linear-gradient(to right,$pseubu_color_outer1, $pseubu_color_outer2, #371e19,$pseubu_color_outer2,$pseubu_color_outer1)
   }
   &:active {
-    color:#893218;
+    border-color: #d9a8f2;
+    color: #88701e;
   }
 }
 
