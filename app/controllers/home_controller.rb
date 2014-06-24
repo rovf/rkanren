@@ -1,3 +1,5 @@
+# OBSOLETE????
+
 class HomeController < ApplicationController
   def init
     logger.debug("HomeController.init")

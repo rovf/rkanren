@@ -1,0 +1,24 @@
+<canvas height="24px"></canvas>
+<div class="page_prompt">
+Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</span>, or
+  &nbsp;<span class="larger_font"><b><%= link_to 'register',new_user_path %></b></span>, if you haven't done so yet, or <%= link_to 'continue', controller: 'dicts' %> as a unregistered guest user.
+</div>
+
+<hr class="kanren_hr">
+
+<div class="login">
+  <%# By default, form_for uses POST. Submittin the form goes hence to sessions#create %>
+  <%= form_for :session, url: sessions_path do |f| %>
+    <div class="centered">
+      <%= f.label :name, 'User ID' %>
+      <%= f.text_field :name, class: 'user_mgt_req_entry', maxlength:24, size:24 %>
+      <%= f.label :password, 'Password' %>
+      <%= f.password_field :password, class: 'user_mgt_req_entry' %>
+    </div>
+    <div class="centered">
+      <%= f.submit 'Log in now', class: "kanren_button" %>
+      <%= link_to 'Use this site as a guest user', {controller: 'dicts'}, {class: 'pseudo_button'} %>
+    </div>
+  <% end %>
+</div>
+<hr class="kanren_hr">

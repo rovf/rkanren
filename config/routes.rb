@@ -7,13 +7,15 @@ Rails.application.routes.draw do
 
   match '/contact', to: 'static_pages#contact', via: 'get'
   # generates contact_url and contact_path
-  match '/login', to: 'home#login', via: 'get'
+  match '/login', to: 'sessions#new', via: 'get'
+  match '/logout',to:'sessions#destroy', via: 'delete'
 
   resources :dicts do
     resources :cards
   end
 
   resources :users
+  resources :sessions
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

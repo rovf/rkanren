@@ -9,13 +9,25 @@ $button_font_size:0.8em;
 
 */
 
+$klogofontsize:150%;
+
 .kanrenlogo {
   color:#76d661;
   background-color:#466c34;
   text-shadow: 2px 2px #5de040;
-  font-size:150%;
+  font-size:$klogofontsize;
   font-weight:lighter;
   padding: 0 4px 2px 1px;
+}
+
+
+.page_prompt {
+  border-style: solid dotted solid dotted;
+  box-shadow: 8px 8px 6px #e5f5ef;
+  padding:5px 2px 3px 8px;
+  margin: 10px 10px 30px 4px;
+  line-height: 2*$klogofontsize;
+  background-color: #9a1729;
 }
 
 /* Todo: Simplify this with sass script */
@@ -120,7 +132,7 @@ $pseubu_color_outer2:#855536;
   background-color: #30ddf5;
   font-family:$japanese_font;
   border-style: solid;
-  border-widt: 2px;
+  border-width: 2px;
   border-color: #afdbb8;
   min-width:16em;
   padding: $pseubu_verpad $pseubu_horpad $pseubu_verpad $pseubu_horpad;

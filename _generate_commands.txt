@@ -11,3 +11,4 @@ rails generate controller Cards new create destroy edit
 
 rails generate model Idiom repres:string{128}:index card:references 'kind:integer{1}' note:text 'level:integer{3}' atari:integer
 
+rails generate controller Sessions

@@ -33,6 +33,9 @@ footer {
 .centered {
   text-align:center;
 }
+.larger_font {
+  font-size: 110%;
+}
 .kanren_note {
   background-color: #af3e38;
 }
@@ -57,4 +60,9 @@ footer {
 .notice {
   background-color: #40842f !important;
   quotes: none;
+}
+
+#disclaimer {
+  font-size: 30%;
+  background-color: #700686;
 }
