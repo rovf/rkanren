@@ -22,10 +22,10 @@
 
 
   <%= d.label(:dictname,'Dictionary:') %>
-  <%= d.text_field(:dictname, maxlength: 64, class:"dict_name_entry") %>
+  <%= d.text_field(:dictname, maxlength: 16, class:"dict_name_entry") %>
   &nbsp;&nbsp;
   <%= d.label(:language,'Type/Language:') %>
-  <%= d.text_field(:language, value: 'Deutsch', maxlength: 14, size: 14, class: 'language_field') %>
+  <%= d.text_field(:language, value: 'Deutsch', maxlength: 32, size: 32, class: 'language_field') %>
   <%= d.submit(value="CREATE", class: 'kanren_button', name: 'create') %>
 <%  end %>
 

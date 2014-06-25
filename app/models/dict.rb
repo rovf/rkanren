@@ -7,11 +7,11 @@ class Dict < ActiveRecord::Base
   validates  :dictname,
              uniqueness: true,
              presence: true,
-             length: { maximum: 64},
+             length: { maximum: 16},
              format: { with: /\A\w/ }
   validates  :language,
              presence: true,
-             length: { maximum: 14 }
+             length: { maximum: 32 }
   validates  :user_id,
              presence: true
 
