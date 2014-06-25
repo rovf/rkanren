@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
 
   def self.guest
     # But we really don't need to authenticate the guest user
-    guestuser=find_by_name(guestname).authenticate(guestpass)
+    guestuser=find_by_name(guestname)
     retries=3
     while guestuser.nil? && retries > 0
       guestuser=User.new(name: guestname , email:'', password: guestpass)
@@ -42,6 +42,15 @@ class User < ActiveRecord::Base
         guestuser=nil
         sleep(2)
         retries-=1
+      end
+    end
+    if guestuser.nil?
+      logger.fatal("We are in serious trouble: Guest user can not be created")
+    elsif guestuser.password_digest.nil?
+      guestuser.update_attributes!(:password => guestpass)
+    else
+      unless guestuser.authenticate(guestpass)
+        logger.error('This is weird: Guest user fails authentification')
       end
     end
     guestuser

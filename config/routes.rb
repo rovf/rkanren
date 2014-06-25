@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # generates contact_url and contact_path
   match '/login', to: 'sessions#new', via: 'get'
   match '/logout',to:'sessions#destroy', via: 'delete'
+  match '/work_as_guest', to:'sessions#become_guest', via: 'delete'
 
   resources :dicts do
     resources :cards

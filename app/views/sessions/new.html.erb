@@ -1,3 +1,4 @@
+<!-- login form -->
 <canvas height="24px"></canvas>
 <div class="page_prompt">
 Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</span>, or
@@ -7,7 +8,7 @@ Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</
 <hr class="kanren_hr">
 
 <div class="login">
-  <%# By default, form_for uses POST. Submittin the form goes hence to sessions#create %>
+  <%# By default, form_for uses POST. Submitting the form goes hence to sessions#create %>
   <%= form_for :session, url: sessions_path do |f| %>
     <div class="centered">
       <%= f.label :name, 'User ID' %>
@@ -17,7 +18,7 @@ Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</
     </div>
     <div class="centered">
       <%= f.submit 'Log in now', class: "kanren_button" %>
-      <%= link_to 'Use this site as a guest user', {controller: 'dicts'}, {class: 'pseudo_button'} %>
+      <%= link_to 'Use this site as a guest user', work_as_guest_path, {class: 'pseudo_button', method: 'delete'} %>
     </div>
   <% end %>
 </div>

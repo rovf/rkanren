@@ -18,22 +18,26 @@
   end
 
   # GET /users/1/edit
+  # This is used for changing the password
   def edit
   end
 
   # POST /users
-  # POST /users.json
   def create
     @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+    if @user.name =~ /^[\w\d]/
+      respond_to do |format|
+        if @user.save
+          drop_current_user
+          # TODO: Automatically sign in here
+          format.html { redirect_to new_session_path, notice: 'User was successfully created. You can now login with your username.' }
+        else
+          format.html { render :new }
+        end
       end
+    else
+      flash.now[:error]="User name must start with a letter, underscore or digit"
+      render :new
     end
   end
 
@@ -69,6 +73,6 @@
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email)
+      params.require(:user).permit(:name, :email,:password,:password_confirmation)
     end
 end

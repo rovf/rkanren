@@ -30,6 +30,12 @@ footer {
   padding-top: 8px;
 }
 
+.head_status {
+  font-size: 60%;
+  font-weight: 100;
+  text-align: right;
+}
+
 .centered {
   text-align:center;
 }
@@ -60,6 +66,12 @@ footer {
 .notice {
   background-color: #40842f !important;
   quotes: none;
+}
+
+.alert-error {
+  color: red;
+  background-color:  #144213;
+  font-size: 75%;
 }
 
 #disclaimer {

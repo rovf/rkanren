@@ -18,7 +18,8 @@ class DictsController < ApplicationController
     else
       @filter ||= ''
     end
-    @dicts = Dict.all
+    @user=User.find_by_id(current_user_id)
+    @dicts = @user.dicts
     if @filter.length > 0
       re=params['filtertype'] == 'regexp' ? @filter : '\\A'+Regexp::escape(@filter)
       logger.debug('Filtering according to '+re.to_s)
@@ -48,10 +49,10 @@ class DictsController < ApplicationController
     logger.debug('DictsController create: '+params.inspect)
     # Next line needs to be fixed, when we have user authentification
     dict_params.permit(:user_id,:dictname,:language)
-    dict_params[:user_id]=User.guestid
     logger.debug('dict_params after:'+dict_params.inspect)
     @dict = Dict.new(dict_params)
-    @dict.user_id=User.guestid
+    @dict.user_id=current_user_id
+    logger.debug('dict object:'+@dict.inspect)
     if @dict.save
       redirect_to @dict, notice: 'New dictionary'
     else
