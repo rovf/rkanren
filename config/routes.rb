@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   match '/login', to: 'sessions#new', via: 'get'
   match '/logout',to:'sessions#destroy', via: 'delete'
   match '/work_as_guest', to:'sessions#become_guest', via: 'delete'
+  match '/renshuu/:id/:kind', to:'dicts#start_training', via: 'get', as: :renshuu
 
   resources :dicts do
     resources :cards

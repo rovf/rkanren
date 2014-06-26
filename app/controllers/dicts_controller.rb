@@ -85,6 +85,11 @@ class DictsController < ApplicationController
     end
   end
 
+  def start_training
+    logger.debug('START TRAINING:'+params.inspect)
+    redirect_to(dict_path(params['id']))
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dict

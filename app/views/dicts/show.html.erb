@@ -16,6 +16,12 @@
 
 <hr class="kanren_hr">
 
+<%= button_to 'Start Training',renshuu_path(@dict.id,Rkanren::GAIGO),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<%= button_to 'はじめまそう',renshuu_path(@dict.id,Rkanren::KANA),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<%= button_to '始めましょう',renshuu_path(@dict.id,Rkanren::KANJI),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+
+<div class="clear"></div> <!-- because button_to uses floating -->
+
 <hr class="kanren_hr">
 
 <%= link_to 'Change name or type/language', edit_dict_path(@dict) %> |
