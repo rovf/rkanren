@@ -6,14 +6,14 @@ $japanese_mono:"Osaka Monospaced";
 $button_font_size:0.8em;
 
 /*
-
+371e19 5f3ae2 855536
 */
 
 $klogofontsize:150%;
 
 .kanrenlogo {
-  color:#76d661;
-  background-color:#466c34;
+  color:#78e664;
+  background-color:#365c24;
   text-shadow: 2px 2px #5de040;
   font-size:$klogofontsize;
   font-weight:lighter;
@@ -123,13 +123,15 @@ a {
   color:#af0c6f;
 }
 
-$pseubu_horpad: 2em;
-$pseubu_verpad: 2px;
-$pseubu_color_outer1:#f9ac3c;
-$pseubu_color_outer2:#855536;
+$pseubu_horpad: 3em;
+$pseubu_verpad: 4px;
+$pseubu_color_outer:#f9ac3c;
+$pseubu_color_inner:#dd7754;
+$pseubu_color_bbase:#30ddf5;
 .pseudo_button {
   color: #0bc8dd;
-  background-color: #30ddf5;
+  background-color: $pseubu_color_bbase;
+  background:linear-gradient(75deg,$pseubu_color_bbase,$pseubu_color_bbase+96,$pseubu_color_bbase);
   font-family:$japanese_font;
   border-style: solid;
   border-width: 2px;
@@ -140,12 +142,13 @@ $pseubu_color_outer2:#855536;
   &:hover {
     color:#893218;
     border-color: #c9c9f0;
-    background-color:$pseubu_color_outer2;
-    background:linear-gradient(to right,$pseubu_color_outer1, $pseubu_color_outer2, #371e19,$pseubu_color_outer2,$pseubu_color_outer1)
+    background-color:$pseubu_color_outer;
+    background:linear-gradient(90deg,$pseubu_color_bbase,$pseubu_color_outer, $pseubu_color_inner,$pseubu_color_inner,$pseubu_color_outer,$pseubu_color_bbase);
   }
   &:active {
     border-color: #d9a8f2;
     color: #88701e;
+    background:radial-gradient($pseubu_color_inner,$pseubu_color_outer,$pseubu_color_bbase);
   }
 }
 
@@ -167,6 +170,7 @@ $button_color_inner: red;
   }
   &:active {
     color:#00bcbc;
+    background:radial-gradient($button_color_outer,$button_color_inner,($button_color_inner - 24));
   }
 }
 
