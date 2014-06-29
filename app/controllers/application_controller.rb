@@ -6,5 +6,6 @@ class ApplicationController < ActionController::Base
 
   # Helpers are by default visible in views, but not in controllers
   include SessionsHelper
+  include DictsHelper
 
 end

@@ -30,8 +30,8 @@ class DictsController < ApplicationController
   end
 
   # GET /dicts/1
-  # GET /dicts/1.json
   def show
+    @has_kanji_entries_p=has_kanji_entry?(params[:id])
   end
 
   # GET /dicts/new

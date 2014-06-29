@@ -2,7 +2,10 @@
 
 <p>
   Working with dictionary <strong><%= @dict.dictname %></strong>
-  &nbsp;(<%= @dict.language %>)
+  &nbsp;(<%= @dict.language %>), containing <%= pluralize(n_cards_in_dict(@dict),'entry') %>
+  <% unless @has_kanji_entries_p %>
+    <%= ', but no Kanji entry' %>
+  <% end %>
 </p>
 
 <hr class="kanren_hr">
@@ -18,7 +21,9 @@
 
 <%= button_to 'Start Training',renshuu_path(@dict.id,Rkanren::GAIGO),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
 <%= button_to 'はじめまそう',renshuu_path(@dict.id,Rkanren::KANA),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
-<%= button_to '始めましょう',renshuu_path(@dict.id,Rkanren::KANJI),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<% if @has_kanji_entries_p %>
+  <%= button_to '始めましょう',renshuu_path(@dict.id,Rkanren::KANJI),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<% end %>
 
 <div class="clear"></div> <!-- because button_to uses floating -->
 
