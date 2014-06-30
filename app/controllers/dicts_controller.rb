@@ -1,6 +1,8 @@
 class DictsController < ApplicationController
   before_action :set_dict, only: [:show, :edit, :update, :destroy]
 
+  attr_accessor :verified_dict_error
+
   # GET /dicts
   # GET /dicts.json
   # If called from within index.html.erb page, params will
@@ -31,6 +33,7 @@ class DictsController < ApplicationController
 
   # GET /dicts/1
   def show
+    @n_cards=n_cards_in_dict(params[:id])
     @has_kanji_entries_p=has_kanji_entry?(params[:id])
   end
 
@@ -85,8 +88,11 @@ class DictsController < ApplicationController
     end
   end
 
+  # params: id (of dict)
+  #         kind
   def start_training
-    logger.debug('START TRAINING:'+params.inspect)
+    @dict = Dict.find(params[:id])
+
     redirect_to(dict_path(params['id']))
   end
 
@@ -99,5 +105,16 @@ class DictsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def dict_params
       params.require(:dict).permit(:dictname, :user_id, :accessed, :language, :max_level_kanji, :max_level_kana, :max_level_gaigo)
+    end
+
+    def verified_dict(dictid=nil)
+      verified_dict_error=nil
+      @dict = Dict.find_by_id(dictid||params[:id])
+      if @dict.nil?
+        verified_dict_error="Dictionary does not exist"
+      elsif @dict.user_id != current_user_id
+        verified_dict_error="User has no access to this dictionary"
+        @dict=nil
+      end
     end
 end

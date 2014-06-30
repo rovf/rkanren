@@ -6,7 +6,7 @@ module SessionsHelper
 
   def drop_current_user
     session[:currentUser]=nil
-    session[:currentUserId]=nil
+    session[:currentUserId]=User.guestid
   end
 
   def current_user_name
@@ -18,8 +18,7 @@ module SessionsHelper
       cu=current_user_is_guest? ? User.guest : User.find_by_name(current_user_name)
       if cu.nil?
         flash.now('Unknown user!')
-        session[:currentUserId]=0
-        drop_current_user
+        drop_current_user # sets :currentUserId in session
       else
         session[:currentUserId]=cu.id
       end
@@ -29,6 +28,10 @@ module SessionsHelper
 
   def current_user_is_guest?
     current_user_name == User.guestname
+  end
+
+  def current_userid_is_guest?
+    current_user_id == User.guestid
   end
 
 end

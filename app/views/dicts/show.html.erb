@@ -2,8 +2,8 @@
 
 <p>
   Working with dictionary <strong><%= @dict.dictname %></strong>
-  &nbsp;(<%= @dict.language %>), containing <%= pluralize(n_cards_in_dict(@dict),'entry') %>
-  <% unless @has_kanji_entries_p %>
+  &nbsp;(<%= @dict.language %>), containing <%= pluralize(@n_cards,'entry') %>
+  <% unless @n_cards == 0 or @has_kanji_entries_p %>
     <%= ', but no Kanji entry' %>
   <% end %>
 </p>
