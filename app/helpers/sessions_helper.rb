@@ -1,6 +1,7 @@
 module SessionsHelper
 
   def set_current_user(user)
+    session[:currentUserId]=nil # will be recalculated if needed
     session[:currentUser]=user.name
   end
 

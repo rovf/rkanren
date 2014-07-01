@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621102451) do
+ActiveRecord::Schema.define(version: 20140701120759) do
 
   create_table "cards", force: true do |t|
     t.integer  "dict_id"
@@ -39,14 +39,16 @@ ActiveRecord::Schema.define(version: 20140621102451) do
   add_index "dicts", ["user_id"], name: "index_dicts_on_user_id"
 
   create_table "idioms", force: true do |t|
-    t.string   "repres",     limit: 128
+    t.string   "repres",                  limit: 128
     t.integer  "card_id"
-    t.integer  "kind",       limit: 1
+    t.integer  "kind",                    limit: 1
     t.text     "note"
-    t.integer  "level",      limit: 3
+    t.integer  "level",                   limit: 3
     t.integer  "atari"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "queried_time",                        default: '2014-07-01 12:19:42'
+    t.boolean  "last_queried_successful",             default: false
   end
 
   add_index "idioms", ["card_id"], name: "index_idioms_on_card_id"

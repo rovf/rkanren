@@ -1,7 +1,10 @@
 class DictsController < ApplicationController
+
+  include ActionView::Helpers::TextHelper
+
   before_action :set_dict, only: [:show, :edit, :update, :destroy]
 
-  attr_accessor :verified_dict_error
+  attr_reader :verified_dict_error
 
   # GET /dicts
   # GET /dicts.json
@@ -22,6 +25,7 @@ class DictsController < ApplicationController
     end
     @user=User.find_by_id(current_user_id)
     @dicts = @user.dicts
+    logger.debug(pluralize(@dicts.length,'dictionary')+' [yet unfiltered] found for user '+current_user_id.to_s+' ('+current_user_name+')')
     if @filter.length > 0
       re=params['filtertype'] == 'regexp' ? @filter : '\\A'+Regexp::escape(@filter)
       logger.debug('Filtering according to '+re.to_s)
@@ -33,8 +37,11 @@ class DictsController < ApplicationController
 
   # GET /dicts/1
   def show
-    @n_cards=n_cards_in_dict(params[:id])
-    @has_kanji_entries_p=has_kanji_entry?(params[:id])
+    with_verified_dictparam(dicts_path) do |d|
+      @dict=d # In case we need it in view
+      @n_cards=n_cards_in_dict(d)
+      @has_kanji_entries_p=has_kanji_entry?(d)
+    end
   end
 
   # GET /dicts/new
@@ -108,13 +115,30 @@ class DictsController < ApplicationController
     end
 
     def verified_dict(dictid=nil)
-      verified_dict_error=nil
-      @dict = Dict.find_by_id(dictid||params[:id])
-      if @dict.nil?
-        verified_dict_error="Dictionary does not exist"
-      elsif @dict.user_id != current_user_id
-        verified_dict_error="User has no access to this dictionary"
-        @dict=nil
+      @verified_dict_error=nil
+      dictid||=params[:id]
+      dict = Dict.find_by_id(dictid)
+      if dict.nil?
+        @verified_dict_error="Dictionary "+dictid.to_s+" does not exist"
+      elsif dict.user_id != current_user_id
+        @verified_dict_error="You have no right to access to dictionary number "+dictid.to_s
+        dict=nil
       end
+      dict
     end
+
+    def with_verified_dict(dictid,fail_redirect)
+      dict=verified_dict(dictid)
+      if(dict.nil?)
+        flash[:error]=verified_dict_error
+        redirect_to fail_redirect unless fail_redirect.blank?
+      else
+        yield dict if block_given?
+      end
+      dict
+    end
+
+  def with_verified_dictparam(fail_redirect)
+    with_verified_dict(nil,fail_redirect)
+  end
 end
