@@ -17,4 +17,10 @@ module DictsHelper
     d.is_a?(Dict) ? d.id : d
   end
 
+  def choose_card_for_dict(d,kind)
+    candidates=Card.joins(:idioms).where("dict_id=#{to_dict_id d} and kind=#{kind}").sort do |a,b|
+      logger.debug("+++++++ inside sort: "+a.inspect)
+    end
+  end
+
 end

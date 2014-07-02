@@ -40,6 +40,7 @@ class DictsController < ApplicationController
     with_verified_dictparam(dicts_path) do |d|
       @dict=d # In case we need it in view
       @n_cards=n_cards_in_dict(d)
+      logger.debug("DictsController.show : setting n_cards "+@n_cards.inspect)
       @has_kanji_entries_p=has_kanji_entry?(d)
     end
   end
@@ -98,9 +99,11 @@ class DictsController < ApplicationController
   # params: id (of dict)
   #         kind
   def start_training
-    @dict = Dict.find(params[:id])
+    with_verified_dictparam(dicts_path) do |d|
+      @dict=d # In case we need it in view
 
-    redirect_to(dict_path(params['id']))
+      redirect_to(dict_path(d.id))
+    end
   end
 
   private
@@ -117,6 +120,7 @@ class DictsController < ApplicationController
     def verified_dict(dictid=nil)
       @verified_dict_error=nil
       dictid||=params[:id]
+      logger.debug("+++++++++ verify dict "+dictid.to_s)
       dict = Dict.find_by_id(dictid)
       if dict.nil?
         @verified_dict_error="Dictionary "+dictid.to_s+" does not exist"
@@ -124,21 +128,27 @@ class DictsController < ApplicationController
         @verified_dict_error="You have no right to access to dictionary number "+dictid.to_s
         dict=nil
       end
+      logger.debug("+++++++++ verified dict:"+dict.inspect)
       dict
     end
 
-    def with_verified_dict(dictid,fail_redirect)
+    def with_verified_dict(dictid,fail_redirect,&block)
       dict=verified_dict(dictid)
       if(dict.nil?)
         flash[:error]=verified_dict_error
         redirect_to fail_redirect unless fail_redirect.blank?
       else
-        yield dict if block_given?
+        if block_given?
+          logger.debug('++++++++ with_verified_dict: yielding')
+          yield dict if block_given?
+        else
+          logger.debug('++++++++ no block supplied')
+        end
       end
       dict
     end
 
-  def with_verified_dictparam(fail_redirect)
-    with_verified_dict(nil,fail_redirect)
+  def with_verified_dictparam(fail_redirect,&block)
+    with_verified_dict(nil,fail_redirect,&block)
   end
 end

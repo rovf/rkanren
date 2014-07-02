@@ -45,4 +45,7 @@ module Rkanren
   # Each representation can have a note attached.
   KIND_REP_NOTE=KIND_TXT.map { |s| s+'_notes' }
 
+  # Maximum allowed number of entries per dict
+  MAX_CARDS_PER_DICT=250
+
 end

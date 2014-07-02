@@ -10,8 +10,12 @@
 
 <hr class="kanren_hr">
 
-<%#= button_to 'Add Idiom XXX', {controller: 'cards', action: 'new'}, {method: 'get', class: 'kanren_button'} %>
-<%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<% if @n_cards < Rkanren::MAX_CARDS_PER_DICT %>
+  <%#= button_to 'Add Idiom XXX', {controller: 'cards', action: 'new'}, {method: 'get', class: 'kanren_button'} %>
+  <%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<% else %>
+  Dictionary is full&nbsp;&nbsp;&nbsp;
+<% end %>
 
 <%= button_to 'List Idioms', dict_cards_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
 
