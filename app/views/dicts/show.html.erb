@@ -23,8 +23,13 @@
 
 <hr class="kanren_hr">
 
-<%= button_to 'Start Training',renshuu_path(@dict.id,Rkanren::GAIGO),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
-<%= button_to 'はじめまそう',renshuu_path(@dict.id,Rkanren::KANA),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+<% if @n_cards > 0 %>
+
+  <%= button_to 'Start Training',renshuu_path(@dict.id,Rkanren::GAIGO),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+  <%= button_to 'はじめまそう',renshuu_path(@dict.id,Rkanren::KANA),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+
+<% end %>
+
 <% if @has_kanji_entries_p %>
   <%= button_to '始めましょう',renshuu_path(@dict.id,Rkanren::KANJI),{method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
 <% end %>

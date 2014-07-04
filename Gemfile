@@ -8,6 +8,14 @@ gem 'rails', '4.1.1'
 # For secure password
 gem 'bcrypt'
 
+# Generating random user names
+gem 'faker' # ,'1.1.2'
+
+# For paginating large data sets in an easy way
+gem 'will_paginate','3.0.4'
+gem 'bootstrap-will_paginate', '0.0.9'
+
+
 # Use sqlite3 as the database for Active Record
 group :development, :test do
    gem 'sqlite3', '1.3.8'
