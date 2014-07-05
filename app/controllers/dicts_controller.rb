@@ -103,7 +103,8 @@ class DictsController < ApplicationController
       @dict=d # In case we need it in view
       @card=choose_card_for_dict(d,params[:kind])
       logger.debug("Card choosen: "+@card.inspect)
-      redirect_to(dict_path(d.id))
+      # redirect_to(dict_path(d.id))
+      render :training_unit
     end
   end
 
@@ -140,7 +141,6 @@ class DictsController < ApplicationController
         redirect_to fail_redirect unless fail_redirect.blank?
       else
         if block_given?
-          logger.debug('++++++++ with_verified_dict: yielding')
           yield dict if block_given?
         end
       end

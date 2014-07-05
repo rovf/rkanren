@@ -45,6 +45,14 @@ module Rkanren
   # Each representation can have a note attached.
   KIND_REP_NOTE=KIND_TXT.map { |s| s+'_notes' }
 
+  # Sequences to be queried
+  QUERYSEQ=
+  {
+    GAIGO => [KANA,KANJI],
+    KANA  => [GAIGO,KANJI],
+    KANJI => [KANA,GAIGO]
+  }
+
   # Maximum allowed number of entries per dict
   MAX_CARDS_PER_DICT=250
 
