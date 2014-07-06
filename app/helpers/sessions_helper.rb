@@ -1,13 +1,17 @@
 module SessionsHelper
 
   def set_current_user(user)
-    session[:currentUserId]=nil # will be recalculated if needed
-    session[:currentUser]=user.name
+    unless session[:currentUser].nil? or user.name != session[:currentUser]
+      set_no_training
+      session[:currentUserId]=nil # will be recalculated if needed
+      session[:currentUser]=user.name
+    end
   end
 
   def drop_current_user
     session[:currentUser]=nil
     session[:currentUserId]=User.guestid
+    set_no_training
   end
 
   def current_user_name
@@ -33,6 +37,19 @@ module SessionsHelper
 
   def current_userid_is_guest?
     current_user_id == User.guestid
+  end
+
+  # Passing nil means no training going on
+  def set_current_kind(kind)
+    session[:kind]=kind
+  end
+
+  def set_no_training
+    set_current_kind(nil)
+  end
+
+  def current_kind
+    session[:kind]
   end
 
 end

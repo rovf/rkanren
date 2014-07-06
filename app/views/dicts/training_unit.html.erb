@@ -1,1 +1,26 @@
+<noscript>JavaScript must be enabled to use the training</noscript>
 dicts/training_unit.html.erb
+<a href="http://www.randomsnippets.com/2008/02/12/how-to-hide-and-show-your-div/">so geht's</a>
+
+<script>
+  function unhide_next() { alert "works!" }
+</script>
+<!-- TODO: Just use a normal HTML button here. No need to
+     use a Rails function!!!!!
+-->
+
+<%= button_to '次', '#', { class: 'kanren_button', form_class: 'kanren_button_to', onsubmit: 'unhide_next()' } %>
+
+<%# button_to_function '次', 'unhide_next()', class: 'kanren_button' %>
+
+<div class="clear"></div>
+
+<% vis_style=['block']+['none']*(@idiom_sequence.length-1) %>
+<% @idiom_sequence.each_with_index do |kind,i| %>
+
+  <div id="tu_idiom_<%= kind %>" style="display:<%= vis_style[i] %>">
+    <%= @idioms[kind].repres %>
+  </div>
+
+<% end %>
+

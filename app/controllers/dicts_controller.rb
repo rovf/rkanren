@@ -101,9 +101,21 @@ class DictsController < ApplicationController
   def start_training
     with_verified_dictparam(dicts_path) do |d|
       @dict=d # In case we need it in view
-      @card=choose_card_for_dict(d,params[:kind])
+      kind=params[:kind].to_i
+      @card=choose_card_for_dict(d,kind)
+      if kind<0 or kind>=Rkanren::NREPS
+        flash[:error]="Illegal 'kind':"+params[:kind]
+        redirect_to(root_path)
+      end
+      if @card.nil?
+        flash[:error]="Could not choose an idiom"
+        redirect_to(dict_path(d.id))
+      end
+      set_current_kind(kind)
       logger.debug("Card choosen: "+@card.inspect)
-      # redirect_to(dict_path(d.id))
+      # Model guarantees that idioms are sorted according to kind
+      @idioms=@card.idioms.all
+      @idiom_sequence=([kind]+Rkanren::QUERYSEQ[kind])[0,@idioms.length]
       render :training_unit
     end
   end
