@@ -1,17 +1,33 @@
 <noscript>JavaScript must be enabled to use the training</noscript>
 dicts/training_unit.html.erb
-<a href="http://www.randomsnippets.com/2008/02/12/how-to-hide-and-show-your-div/">so geht's</a>
+<!-- http://www.randomsnippets.com/2008/02/12/how-to-hide-and-show-your-div/ --><br />
+
+<% js_unhide_idstrings=@idiom_sequence[1..-1].map {|n| "'tu_idiom_#{n}'"} %>
 
 <script>
-  function unhide_next() { alert "works!" }
+  var unhide_ids=[<%= js_unhide_idstrings.join(',').html_safe %>, 'ass'];
+  function unhide_next() {
+    unhide_id=unhide_ids.shift()
+    document.getElementById(unhide_id).style.display='inline'
+    if (unhide_ids.length == 0) {
+      document.getElementById('tsugi').style.display='none'
+    }
+  }
+  function assert_correct(is_correct) {
+    alert("clicked" )
+  }
 </script>
-<!-- TODO: Just use a normal HTML button here. No need to
-     use a Rails function!!!!!
--->
 
-<%= button_to '次', '#', { class: 'kanren_button', form_class: 'kanren_button_to', onsubmit: 'unhide_next()' } %>
+<button onclick="unhide_next()" class="kanren_button" id="tsugi">次</button>
+<% starting_idiom=@idioms[@idiom_sequence[0]] %>
+<%= form_for starting_idiom, url: update_score_path(starting_idiom.id) do |f| %>
+  <span id="ass" style="display:none">
+    <%# This passes i.e. "judgement"=>"accept %>
+    <%= f.submit(value="accept", name:"judgement", class:"kanren_button") %>
+    <%= f.submit("reject", name:"judgement",class:"kanren_button") %>
+</span>
+<% end %>
 
-<%# button_to_function '次', 'unhide_next()', class: 'kanren_button' %>
 
 <div class="clear"></div>
 

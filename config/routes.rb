@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'idioms/update_score'
+
+  get 'idioms/edit'
+
+  get 'idioms/update'
+
 #  get 'cards/new'
 #  get 'cards/create'
 #  get 'cards/destroy'
@@ -11,11 +17,13 @@ Rails.application.routes.draw do
   match '/logout',to:'sessions#destroy', via: 'delete'
   match '/work_as_guest', to:'sessions#become_guest', via: 'delete'
   match '/renshuu/:id/:kind', to:'dicts#start_training', via: 'get', as: :renshuu
+  match '/update_score/:id', to:'idioms#update_score', via: 'patch', as: :update_score
 
   resources :dicts do
     resources :cards
   end
 
+  resources :idioms
   resources :users
   resources :sessions
 

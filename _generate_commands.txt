@@ -12,3 +12,5 @@ rails generate controller Cards new create destroy edit
 rails generate model Idiom repres:string{128}:index card:references 'kind:integer{1}' note:text 'level:integer{3}' atari:integer queried_time:datetime last_queried_successful:boolean
 
 rails generate controller Sessions
+
+rails generate controller Idioms update_score edit update
