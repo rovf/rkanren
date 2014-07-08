@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'upload/index'
+
+  get 'upload/upload_file'
+
   get 'idioms/update_score'
 
   get 'idioms/edit'
@@ -26,6 +30,12 @@ Rails.application.routes.draw do
   resources :idioms
   resources :users
   resources :sessions
+
+  resources :upload, only: [:index] do
+    member do
+      post :upload_file
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

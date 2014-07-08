@@ -142,7 +142,6 @@ class DictsController < ApplicationController
         @verified_dict_error="You have no right to access to dictionary number "+dictid.to_s
         dict=nil
       end
-      logger.debug("+++++++++ verified dict:"+dict.inspect)
       dict
     end
 

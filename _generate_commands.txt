@@ -14,3 +14,7 @@ rails generate model Idiom repres:string{128}:index card:references 'kind:intege
 rails generate controller Sessions
 
 rails generate controller Idioms update_score edit update
+
+rails generate controller Upload index upload_file
+
+rails generate model PlainFile
