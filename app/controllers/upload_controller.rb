@@ -23,6 +23,7 @@ class UploadController < ApplicationController
 private:
 
   def parse_to_temp_dict(tempf)
+    logger.debug('not implemented yet')
   end
 
 end
