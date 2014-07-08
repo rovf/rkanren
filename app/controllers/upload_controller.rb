@@ -20,10 +20,10 @@ class UploadController < ApplicationController
     tempf.unlink
   end
 
-private:
+private
 
   def parse_to_temp_dict(tempf)
-    logger.debug('not implemented yet')
+    logger.debug('++++++++++ not implemented yet')
   end
 
 end
