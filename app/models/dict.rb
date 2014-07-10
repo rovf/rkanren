@@ -1,13 +1,16 @@
 class Dict < ActiveRecord::Base
 
+  DICTNAME_MAXLEN=16
+
   belongs_to  :user
   has_many    :cards,
               dependent: :destroy
+  has_many :idioms, through: :cards
 
   validates  :dictname,
              uniqueness: true,
              presence: true,
-             length: { maximum: 16},
+             length: { maximum: DICTNAME_MAXLEN},
              format: { with: /\A\w/ }
   validates  :language,
              presence: true,
@@ -19,6 +22,10 @@ class Dict < ActiveRecord::Base
     validates field_sym, presence: true
   end
 
+  # This string MUST be of length 1. A dictionary staring with
+  # this character is an internal dictionary.
+  SIGIL_INTERNAL_DICT='_'
+
   before_save do
   end
 
@@ -28,6 +35,18 @@ class Dict < ActiveRecord::Base
     self.max_level_kanji=0
     self.max_level_kana=0
     self.max_level_gaigo=0
+  end
+
+  def has_kind?(kind)
+    idioms.where(kind: kind).exists?
+  end
+
+  # Create temporary dictionary for user
+  def self.tempdict(user)
+    @tempdict_seqnum ||= 0
+    tempname=(SIGIL_INTERNAL_DICT+("%07d" % @tempdict_seqnum).to_s+'_'+user.name)[0,DICTNAME_MAXLEN]
+    @tempdict_seqnum %= 10000000
+    Dict.new(dictname:tempname,language:'Elbisch')
   end
 
   # Bring inconsistent dict records in a correct state, and purge

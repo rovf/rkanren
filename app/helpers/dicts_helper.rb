@@ -8,6 +8,9 @@ module DictsHelper
 
   # Returns true, iff the dictionary denoted by d contains at least one Kanji entry
   def has_kanji_entry?(d)
+    d.has_kind?(Rkanren::KANJI)
+  end
+  def has_kanji_entry__obsolete_version?(d)
     Card. joins(:idioms).
         where("dict_id=#{to_dict_id d} and cards.id=idioms.card_id and kind=#{Rkanren::KANJI}").
         count > 0

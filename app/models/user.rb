@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   has_many  :dicts,
-            dependent: :destroy
+            dependent: :destroy # Maybe we should not do that, but put the dictionaries into guest space instead
 
   has_secure_password
 

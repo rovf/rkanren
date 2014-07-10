@@ -64,7 +64,10 @@ class DictsController < ApplicationController
     @dict = Dict.new(dict_params)
     @dict.user_id=current_user_id
     logger.debug('dict object:'+@dict.inspect)
-    if @dict.save
+    if @dict.dictname[0,1] == Dict.SIGIL_INTERNAL_DICT
+      flash.now[:error]="Dictionary name must not start with "+Dict.SIGIL_INTERNAL_DICT
+      render :index
+    elsif @dict.save
       redirect_to @dict, notice: 'New dictionary'
     else
       @dicts=Dict.all # needs to be filtered?
@@ -121,6 +124,7 @@ class DictsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_dict
       @dict = Dict.find(params[:id])
@@ -134,7 +138,6 @@ class DictsController < ApplicationController
     def verified_dict(dictid=nil)
       @verified_dict_error=nil
       dictid||=params[:id]
-      logger.debug("+++++++++ verify dict "+dictid.to_s)
       dict = Dict.find_by_id(dictid)
       if dict.nil?
         @verified_dict_error="Dictionary "+dictid.to_s+" does not exist"

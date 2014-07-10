@@ -15,6 +15,11 @@ class UploadController < ApplicationController
     # - if successful, merge the temporary dict object into the current one
     # - otherwise generate error message
     # - delete the temporary dict object
+    # IMPORTANT: The new words should have the level of the imported
+    # dictionary, if the target dictionary is empty, and to
+    # maxlevel, if it is not. The latter should be (later) made
+    # a user's choice. Don't forget to update max_level_kanji etc.
+    # in the Dict instance.
     parse_to_temp_dict(tempf)
     tempf.close
     tempf.unlink
