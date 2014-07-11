@@ -31,6 +31,10 @@ module SessionsHelper
     session[:currentUserId]
   end
 
+  def current_user
+    current_user_is_guest? ? User.guest : User.find_by_id(current_user_id)
+  end
+
   def current_user_is_guest?
     current_user_name == User.guestname
   end

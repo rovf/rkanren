@@ -80,4 +80,35 @@ private
       orig_pos, # Must come last. Index in original candidates array
     ]
   end
+
+  def verified_dict(dictid=nil)
+    @verified_dict_error=nil
+    dictid||=params[:id]
+    dict = Dict.find_by_id(dictid)
+    if dict.nil?
+      @verified_dict_error="Dictionary "+dictid.to_s+" does not exist"
+    elsif dict.user_id != current_user_id
+      @verified_dict_error="You have no right to access to dictionary number "+dictid.to_s
+      dict=nil
+    end
+    dict
+  end
+
+  def with_verified_dict(dictid,fail_redirect)
+    dict=verified_dict(dictid)
+    if(dict.nil?)
+      flash[:error]=verified_dict_error
+      redirect_to fail_redirect unless fail_redirect.blank?
+    else
+      if block_given?
+        yield dict if block_given?
+      end
+    end
+    dict
+  end
+
+  def with_verified_dictparam(fail_redirect,&block)
+    with_verified_dict(nil,fail_redirect,&block)
+  end
+
 end

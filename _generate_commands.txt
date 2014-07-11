@@ -17,4 +17,4 @@ rails generate controller Idioms update_score edit update
 
 rails generate controller Upload index upload_file
 
-rails generate model PlainFile
+rails generate model UniqueId 'key:string{16}:index' padlength:integer 'value:string{256}'

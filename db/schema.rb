@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140701120759) do
+ActiveRecord::Schema.define(version: 20140711131400) do
 
   create_table "cards", force: true do |t|
     t.integer  "dict_id"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(version: 20140701120759) do
 
   add_index "idioms", ["card_id"], name: "index_idioms_on_card_id"
   add_index "idioms", ["repres"], name: "index_idioms_on_repres"
+
+  create_table "unique_ids", force: true do |t|
+    t.string   "key",        limit: 16
+    t.integer  "padlength"
+    t.string   "value",      limit: 256
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "unique_ids", ["key"], name: "index_unique_ids_on_key"
 
   create_table "users", force: true do |t|
     t.string   "name"

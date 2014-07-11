@@ -1,10 +1,10 @@
-<h1>Upload#index</h1>
-<p>Find me in app/views/upload/index.html.erb</p>
+<h1>Upload Dictionary</h1>
+<p>The content will be merged into dictionary <%= @dict.dictname %></p>
 
 <!-- The 'id' parameter is not used yet. It is intended to contain
      the purpose of the uploaded file ("type of upload").
 -->
-<%= form_tag({action: 'upload_file', id: 'x'},multipart: true) do %>
+<%= form_tag({action: 'upload_file', dict_id: @dict.id, id: 'x'},multipart: true) do %>
 <!-- It's nearly impossible to style the button in a file-input
      element without having some drawbacks. This is discussed here:
      http://www.quirksmode.org/dom/inputfile.html

@@ -25,17 +25,17 @@ Rails.application.routes.draw do
 
   resources :dicts do
     resources :cards
+    resources :upload, only: [:index] do
+      member do
+        post :upload_file
+      end
+    end
+
   end
 
   resources :idioms
   resources :users
   resources :sessions
-
-  resources :upload, only: [:index] do
-    member do
-      post :upload_file
-    end
-  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
