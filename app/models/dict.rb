@@ -42,7 +42,7 @@ class Dict < ActiveRecord::Base
   end
 
   # Create temporary dictionary for user
-  def self.tempdict(user=current_user)
+  def self.tempdict(user)
     tempname=(SIGIL_INTERNAL_DICT+UniqueId.gen_tempdict_uid+'_'+user.name)[0,DICTNAME_MAXLEN]
     Dict.new(dictname:tempname,language:'Elbisch')
   end

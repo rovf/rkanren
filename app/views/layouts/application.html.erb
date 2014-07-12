@@ -23,6 +23,7 @@
   <p class="notice"><%= notice %></p>
   <nav class="centered">
     <%= link_to('Home',root_path,class:"pseudo_button") %>
+    <%= link_to image_tag('rails.png', height:42, alt:'Powered by RubyOnRails', class:'RORlogo'), 'http://rubyonrails.org/' %>
     <%= request.fullpath == contact_path ? '' : link_to('Contact',contact_path,class:"pseudo_button") %>
   </nav>
   <% if Rails.env.development?%>

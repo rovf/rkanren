@@ -23,7 +23,7 @@ class UploadController < ApplicationController
     # a user's choice. Don't forget to update max_level_kanji etc.
     # in the Dict instance.
     with_verified_dict(params[:dict_id],root_path) do |d|
-      tempdict=Dict.tempdict
+      tempdict=Dict.tempdict(current_user)
       parse_to_temp_dict(tempf,tempdict,d)
       # TODO: Destroy tempdict
     end
@@ -33,7 +33,7 @@ class UploadController < ApplicationController
 
 private
 
-  def parse_to_temp_dict(tempf)
+  def parse_to_temp_dict(tempf,tempdict,targetdict)
     logger.debug('++++++++++ not implemented yet')
   end
 
