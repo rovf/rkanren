@@ -44,7 +44,7 @@ class Dict < ActiveRecord::Base
   # Create temporary dictionary for user
   def self.tempdict(user)
     tempname=(SIGIL_INTERNAL_DICT+UniqueId.gen_tempdict_uid+'_'+user.name)[0,DICTNAME_MAXLEN]
-    Dict.new(dictname:tempname,language:'Elbisch')
+    user.dicts.build(dictname:tempname,language:'Elbisch')
   end
 
   # Bring inconsistent dict records in a correct state, and purge
