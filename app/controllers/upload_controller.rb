@@ -92,6 +92,8 @@ private
           # that we don't have this information available yet.
           level_line = next_line # TODO evaluate this line
 
+          logger.debug("Processed with"+(kanjirep.nil? ? 'out' : '')+':['+gaigorep+']')
+
         end # loop
 
       rescue EOFError => e
