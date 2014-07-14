@@ -1,15 +1,27 @@
 <h1>Upload Dictionary</h1>
 <p>The content will be merged into dictionary <%= @dict.dictname %></p>
 
+<hr class="kanren_hr">
+
 <!-- The 'id' parameter is not used yet. It is intended to contain
      the purpose of the uploaded file ("type of upload").
 -->
-<%= form_tag({action: 'upload_file', dict_id: @dict.id, id: 'x'},multipart: true) do %>
+Select a dictionary file for uploading:<br /><br />
+<%= form_tag({action: 'upload_file', dict_id: @dict.id, id: 'kanren_dict'},multipart: true) do %>
 <!-- It's nearly impossible to style the button in a file-input
      element without having some drawbacks. This is discussed here:
      http://www.quirksmode.org/dom/inputfile.html
 -->
   <%= file_field_tag :upload, {accept: 'text/plain', class: 'file_upload'} %>
+
+<hr class="kanren_hr">
+<span>What should be done, if an idiom in the uploaded file is already present in the dictionary?</span>
+  <br />
+  <ul style="list-style-type:none">
+    <li><%= radio_button_tag 'duplicates', 'reject', true %>&nbsp;Reject the upload</li>
+    <li><%= radio_button_tag 'duplicates', 'ignore', false %>&nbsp;Keep the version from your dictionary</li>
+    <li><%= radio_button_tag 'duplicates', 'overwrite', false %>&nbsp;Replace the version in your dictionary by the one in the uploaded file</li>
+  </ul>
   <br />
   <%= submit_tag "Upload&Merge", {class: 'kanren_button'} %>
 <% end %>

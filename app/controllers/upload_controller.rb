@@ -6,38 +6,51 @@ class UploadController < ApplicationController
   end
 
   # The "upload" parameter contains the uploaded file.
+  # The "duplicates" parameter indicates what should happen with
+  # idioms, which occur in both the uploaded file and the dictionary.
+  # Possible values: "reject", "ignore", "overwrite"
   def upload_file
-    # File will be deleted when the request ends
-    tempf=params[:upload].tempfile # Class: Tempfile
-    fpath=tempf.path
-    # TODO: Think about the following algorithm. Maybe we can do
-    # the "merging" easier by just changing the dict_id in the
-    # card objects.
-    # - parse the file, store values into a temporary dict object
-    # - if successful, merge the temporary dict object into the current one
-    # - otherwise generate error message
-    # - delete the temporary dict object
-    # IMPORTANT: The new words should have the level of the imported
-    # dictionary, if the target dictionary is empty, and to
-    # maxlevel, if it is not. The latter should be (later) made
-    # a user's choice. Don't forget to update max_level_kanji etc.
-    # in the Dict instance.
-    with_verified_dict(params[:dict_id],root_path) do |d|
-      tempdict=Dict.tempdict(current_user)
-      errmsg=nil
-      if tempdict.save
-        errmsg=parse_to_temp_dict(tempf,tempdict,d)
-        tempdict.destroy
-      else
-        errmsg="Can not create temporary dictionary"
+      # TODO: Think about the following algorithm. Maybe we can do
+      # the "merging" easier by just changing the dict_id in the
+      # card objects.
+      # - parse the file, store values into a temporary dict object
+      # - if successful, merge the temporary dict object into the current one
+      # - otherwise generate error message
+      # - delete the temporary dict object
+      # IMPORTANT: The new words should have the level of the imported
+      # dictionary, if the target dictionary is empty, and to
+      # maxlevel, if it is not. The latter should be (later) made
+      # a user's choice. Don't forget to update max_level_kanji etc.
+      # in the Dict instance.
+      with_verified_dict(params[:dict_id],root_path) do |d|
+        @dict=d
+        if params[:upload].nil?
+          flash.now[:error]="No file selected"
+          render 'index'
+        else
+          # File will be deleted when the request ends
+          tempf=params[:upload].tempfile # Class: Tempfile
+          fpath=tempf.path
+          # tempf.set_encoding('BOM|UTF-8')
+          tempf=File.open(fpath,'r:BOM|UTF-8')
+          logger.debug('+++++++++  Uploaded File opened for reading')
+          tempdict=Dict.tempdict(current_user)
+          errmsg=nil
+          if tempdict.save
+            errmsg=parse_to_temp_dict(tempf, tempdict, d, (params[:duplicates]||'reject').to_sym)
+            tempdict.destroy
+          else
+            errmsg="Can not create temporary dictionary"
+          end
+          tempf.close
+          # tempf.unlink # unlink is instance method only for Tempfile, not for File
+          File.unlink(fpath)
+          unless errmsg.nil?
+            flash[:error]=errmsg
+            redirect_to dict_path(d.id)
+          end
+        end
       end
-      unless errmsg.nil?
-        flash[:error]=errmsg
-        redirect_to dict_path(d.id)
-      end
-    end
-    tempf.close
-    tempf.unlink
   end
 
 private
@@ -47,50 +60,89 @@ private
     line=nil
     loop do
       line=tempf.readline.chomp.strip
+      logger.debug("++++++ READ: "+line)
       break unless line.length == 0 || line[0]=='#'
+      logger.debug("++++++ (IGNORED)")
+    end
+    line
+  end
+
+  # Throws exception if it can't be verified.
+  # Returns the null string if this idiom should be ignored.
+  def verified_idiom(rep, targetdict, kind, duplicates_treatment)
+    unless duplicates_treatment == :overwrite
+      # See whether this idiom already exists
+      if targetdict.idioms.where('repres = ? and kind = ?',rep,kind).length > 0
+        if duplicates_treatment == :reject
+          raise Exception.new("#{Rkanren::KIND_PP} Idiom already in dictionary: #{rep}")
+        else
+          logger.debug("Idiom of type #{Rkanren::KIND_TXT[kind]} ignoren (already in dictionary #{targetdict.dictname}): #{rep}")
+          rep=''
+        end
+      end
+    end
+    rep
+  end
+
+  # Verify dictionary header (containing dictionary filetype).
+  # Throws exception on error.
+  def verify_header(tempf)
+    begin
+        raise Exception.new("Uncrecognized header. Not a dictionary file") unless tempf.readline.chomp == 'KANREN01'
+      rescue EOFError
+        raise Exception.new("Empty file")
     end
   end
 
-  # Throws exception if it can't be verified
-  def verified_idiom(rep,targetdict,kind)
-    rep # TODO: Check that it is not present yet in targetdict
+  # Verify the header of an idiom group. Throws exception on error.
+  # Returns false on EOF. Returns true on new group.
+  def verify_group_header(tempf)
+    start_of_new_group=true
+    begin
+        # For the first read, EOFError is OK. This occurs when
+        # we have trailing empty lines or comment lines in the file
+        raise Exception.new("Error in group header (not a colon)") unless next_line(tempf) == ':'
+      rescue EOFError
+        start_of_new_group=false
+    end
+    start_of_new_group
   end
 
-  def parse_to_temp_dict(tempf,tempdict,targetdict)
-    errmsg=nil
+  # Returns error message in case of error, or the null string
+  # if no error
+  def parse_to_temp_dict(tempf, tempdict, targetdict, duplicates_treatment)
+
+    errmsg=nil # return value
 
     begin
 
-        # File header (specifying dictionary version)
-        begin
-            raise Exception.new("Uncrecognized header. Not a dictionary file") unless tempf.readline.chomp == 'KANREN01'
-          rescue EOFError
-            raise Exception.new("Empty file")
-        end
+        verify_header(tempf)
 
         loop do
 
           # The first line in a group is the group header (a colon)
-          begin
-            # For the first read, EOFError is OK. This occurs when we have trailing empty lines
-            # or comment lines in the file
-              raise Exception.new("Error in group header (not a colon)") unless next_line(tempf) == ':'
-            rescue EOFError
-              break
-          end
+          break unless verify_group_header(tempf)
 
           # Next comes the Kanji representation, or a sole "-" to indicate
           # that we don't have a Kanji representation for this idiom
-          kanji_line = next_line
-          kanjirep = kanji_line == '-' ? nil : verified_idiom(kanji_line,targetdict,Rkanren::KANJI)
+          kanji_line = next_line(tempf)
+          kanjirep = kanji_line == '-' ? nil : verified_idiom(kanji_line, targetdict, Rkanren::KANJI, duplicates_treatment)
 
           # Next come Kana representation and local representation
-          kanarep = verified_idiom(next_line, targetdict, Rkanren::KANA)
-          gaigorep = verified_idiom(next_line, targetdict, Rkanren::GAIGO)
+          kanarep = verified_idiom(next_line(tempf), targetdict, Rkanren::KANA, duplicates_treatment)
+          gaigorep = verified_idiom(next_line(tempf), targetdict, Rkanren::GAIGO, duplicates_treatment)
 
           # Next comes level/atari vector, or a sole "/" to indicate
           # that we don't have this information available yet.
-          level_line = next_line # TODO evaluate this line
+          level_line = next_line(tempf) # TODO evaluate this line
+
+          next if (kanjirep||'-').empty? or kanarep.empty? or gaigorep.empty?
+
+          newcard=tempdict.cards.create!(n_repres: kanjirep.nil? ? 2 : 3)
+          # TODO: Fix level and atari
+          newcard.idioms.create!(repres: kanjirep, kind: Rkanren::KANJI, level: 0, atari: 0) unless kanjirep.nil?
+          newcard.idioms.create!(repres: kanarep, kind: Rkanren::KANA, level: 0, atari: 0)
+          newcard.idioms.create!(repres: gaigorep, kind: Rkanren::GAIGO, level: 0, atari: 0)
 
           logger.debug("Processed with"+(kanjirep.nil? ? 'out' : '')+':['+gaigorep+']')
 
@@ -98,11 +150,16 @@ private
 
       rescue EOFError => e
         errmsg="Last idiom in file is incomplete"
+      rescue RuntimeError
+        raise
       rescue Exception => e
         errmsg=e.message
     end
+
     logger.debug('++++++++++ not completely implemented yet')
-    "Error in line #{tempf.lineno} of uploaded dictionary file:\n"+errmsg
+    "Error in line #{tempf.lineno} of uploaded dictionary file:\n"+errmsg unless errmsg.nil?
+
+    errmsg
   end
 
 end

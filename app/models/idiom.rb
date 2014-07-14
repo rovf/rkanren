@@ -6,8 +6,12 @@ class Idiom < ActiveRecord::Base
   # presence of the card id
   validates :card, :presence => true
 
+  # Removing:             uniqueness: true,
+  # because it must be unique only within a dictionary.
+  # Maybe we can say "uniqueness: { scope: .... }"
+  # But the scope would not be the enclosing card, but the dict.
+  # Also, we need to put "kind" into consideration.
   validates :repres,
-            uniqueness: true,
             presence: true,
             length: { minimum: 1}
 
@@ -17,6 +21,7 @@ class Idiom < ActiveRecord::Base
 
   validates :atari,
             presence: true
+
 
   def update_user_data!(new_rep,new_note)
     update_attributes!(repres: new_rep, note: new_note)
