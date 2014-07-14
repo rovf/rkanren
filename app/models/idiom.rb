@@ -11,6 +11,8 @@ class Idiom < ActiveRecord::Base
   # Maybe we can say "uniqueness: { scope: .... }"
   # But the scope would not be the enclosing card, but the dict.
   # Also, we need to put "kind" into consideration.
+  # For setting the unique index, see:
+  #  http://apidock.com/rails/ActiveRecord/ConnectionAdapters/SchemaStatements/add_index#note_info-953
   validates :repres,
             presence: true,
             length: { minimum: 1}
