@@ -1,4 +1,5 @@
 class UploadController < ApplicationController
+
   def index
     with_verified_dict(params[:dict_id],root_path) do |d|
       @dict=d
@@ -33,11 +34,14 @@ class UploadController < ApplicationController
           fpath=tempf.path
           # tempf.set_encoding('BOM|UTF-8')
           tempf=File.open(fpath,'r:BOM|UTF-8')
-          logger.debug('+++++++++  Uploaded File opened for reading')
           tempdict=Dict.tempdict(current_user)
           errmsg=nil
           if tempdict.save
             errmsg=parse_to_temp_dict(tempf, tempdict, d, (params[:duplicates]||'reject').to_sym)
+            if errmsg.nil?
+              temp_dict_merge(tempdict, d)
+              flash[:success]="Upload sucessful"
+            end
             tempdict.destroy
           else
             errmsg="Can not create temporary dictionary"
@@ -47,8 +51,8 @@ class UploadController < ApplicationController
           File.unlink(fpath)
           unless errmsg.nil?
             flash[:error]=errmsg
-            redirect_to dict_path(d.id)
           end
+          redirect_to dict_path(d.id)
         end
       end
   end
@@ -108,8 +112,7 @@ private
     start_of_new_group
   end
 
-  # Returns error message in case of error, or the null string
-  # if no error
+  # Returns error message in case of error, or nil if no error
   def parse_to_temp_dict(tempf, tempdict, targetdict, duplicates_treatment)
 
     errmsg=nil # return value
@@ -160,6 +163,15 @@ private
     "Error in line #{tempf.lineno} of uploaded dictionary file:\n"+errmsg unless errmsg.nil?
 
     errmsg
+  end
+
+  def temp_dict_merge(tempdict,targetdict)
+    targetdict_id=targetdict.id
+    targetdict.transaction do
+      tempdict.cards do |c|
+        c.update_attributes!(dict_id: targetdict_id)
+      end
+    end
   end
 
 end
