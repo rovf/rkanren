@@ -42,7 +42,8 @@ class UploadController < ApplicationController
               temp_dict_merge(tempdict, d)
               flash[:success]="Upload sucessful"
             end
-            tempdict.destroy
+            # Dict.find_by_id(tempdict.id).destroy
+            tempdict.reload.destroy # Reload gets rid of re-assigned cards
           else
             errmsg="Can not create temporary dictionary"
           end
@@ -64,7 +65,7 @@ private
     line=nil
     loop do
       line=tempf.readline.chomp.strip
-      logger.debug("++++++ READ: "+line)
+      logger.debug("++++++ READ #{line.length} 字: ["+line+']')
       break unless line.length == 0 || line[0]=='#'
       logger.debug("++++++ (IGNORED)")
     end
@@ -159,7 +160,7 @@ private
         errmsg=e.message
     end
 
-    logger.debug('++++++++++ not completely implemented yet')
+    logger.debug('++++++++++ not completely implemented yet (atari/level handling)')
     "Error in line #{tempf.lineno} of uploaded dictionary file:\n"+errmsg unless errmsg.nil?
 
     errmsg
@@ -168,8 +169,10 @@ private
   def temp_dict_merge(tempdict,targetdict)
     targetdict_id=targetdict.id
     targetdict.transaction do
-      tempdict.cards do |c|
+      logger.debug("+++++++++ merging from #{tempdict.dictname} into #{targetdict.dictname}")
+      tempdict.cards.each do |c|
         c.update_attributes!(dict_id: targetdict_id)
+        logger.debug("+++++++ merged: "+c.idioms.first.repres)
       end
     end
   end

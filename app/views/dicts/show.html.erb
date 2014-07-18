@@ -42,4 +42,6 @@
 <hr class="kanren_hr">
 
 <%= link_to 'Change name or type/language', edit_dict_path(@dict) %> |
-<%= link_to 'Back', dicts_path %>
+<%= link_to 'Back', dicts_path %> |
+<%= link_to 'Donate this dictionary to the public', '#' %> |
+<%= link_to 'Delete this dictionary', '#', data: { confirm: 'Really delete? 本当ですか。' } %>
