@@ -1,7 +1,7 @@
 module SessionsHelper
 
   def set_current_user(user)
-    unless session[:currentUser].nil? or user.name != session[:currentUser]
+    if session[:currentUser].nil? or user.name != session[:currentUser]
       set_no_training
       session[:currentUserId]=nil # will be recalculated if needed
       session[:currentUser]=user.name

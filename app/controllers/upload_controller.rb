@@ -11,20 +11,24 @@ class UploadController < ApplicationController
   # idioms, which occur in both the uploaded file and the dictionary.
   # Possible values: "reject", "ignore", "overwrite"
   def upload_file
-      # TODO: Think about the following algorithm. Maybe we can do
-      # the "merging" easier by just changing the dict_id in the
-      # card objects.
-      # - parse the file, store values into a temporary dict object
-      # - if successful, merge the temporary dict object into the current one
-      # - otherwise generate error message
-      # - delete the temporary dict object
-      # IMPORTANT: The new words should have the level of the imported
-      # dictionary, if the target dictionary is empty, and to
-      # maxlevel, if it is not. The latter should be (later) made
-      # a user's choice. Don't forget to update max_level_kanji etc.
-      # in the Dict instance.
-      with_verified_dict(params[:dict_id],root_path) do |d|
-        @dict=d
+    # TODO: Think about the following algorithm. Maybe we can do
+    # the "merging" easier by just changing the dict_id in the
+    # card objects.
+    # - parse the file, store values into a temporary dict object
+    # - if successful, merge the temporary dict object into the current one
+    # - otherwise generate error message
+    # - delete the temporary dict object
+    # IMPORTANT: The new words should have the level of the imported
+    # dictionary, if the target dictionary is empty, and to
+    # maxlevel, if it is not. The latter should be (later) made
+    # a user's choice. Don't forget to update max_level_kanji etc.
+    # in the Dict instance.
+    with_verified_dict(params[:dict_id],root_path) do |d|
+      @dict=d
+      # Check for CANCEL button
+      if params.has_key?('cancel')
+        redirect_to dict_path(d.id)
+      else
         if params[:upload].nil?
           flash.now[:error]="No file selected"
           render 'index'
@@ -56,6 +60,7 @@ class UploadController < ApplicationController
           redirect_to dict_path(d.id)
         end
       end
+    end
   end
 
 private

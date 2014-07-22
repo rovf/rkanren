@@ -13,7 +13,9 @@
 <% if @n_cards < Rkanren::MAX_CARDS_PER_DICT %>
   <%#= button_to 'Add Idiom XXX', {controller: 'cards', action: 'new'}, {method: 'get', class: 'kanren_button'} %>
   <%= button_to 'Add Idiom', new_dict_card_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+  <%# Shouldn't this be PATCH instead of GET? %>
   <%= button_to 'Upload Text File & Merge Into Dictionary', dict_upload_index_path(@dict.id), {method: 'get', class: 'kanren_button', form_class: 'kanren_button_to'} %>
+    <%= button_to 'Import from other Dictionary', '#', {method: 'post', class: 'kanren_button', form_class: 'kanren_button_to'} %>
 <% else %>
   Dictionary is full&nbsp;&nbsp;&nbsp;
 <% end %>
@@ -43,5 +45,9 @@
 
 <%= link_to 'Change name or type/language', edit_dict_path(@dict) %> |
 <%= link_to 'Back', dicts_path %> |
-<%= link_to 'Donate this dictionary to the public', '#' %> |
-<%= link_to 'Delete this dictionary', '#', data: { confirm: 'Really delete? 本当ですか。' } %>
+<% if current_userid_is_guest? %>
+  <%= link_to 'Vote for deletion', '#' %>
+<% else %>
+  <%= link_to 'Donate this dictionary to the public', '#' %> |
+  <%= link_to 'Delete this dictionary', '#', data: { confirm: 'Really delete? 本当ですか。' } %>
+<% end %>
