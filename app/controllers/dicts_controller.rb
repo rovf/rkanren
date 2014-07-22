@@ -64,27 +64,29 @@ class DictsController < ApplicationController
     @dict = Dict.new(dict_params)
     @dict.user_id=current_user_id
     logger.debug('dict object:'+@dict.inspect)
-    if @dict.dictname[0,1] == Dict.SIGIL_INTERNAL_DICT
-      flash.now[:error]="Dictionary name must not start with "+Dict.SIGIL_INTERNAL_DICT
+    @dicts=Dict.all # needs to be filtered?
+    if @dict.dictname[0,1] == Dict::SIGIL_INTERNAL_DICT
+      flash.now[:error]="Dictionary name must not start with "+Dict::SIGIL_INTERNAL_DICT
       render :index
     elsif @dict.save
       redirect_to @dict, notice: 'New dictionary'
     else
-      @dicts=Dict.all # needs to be filtered?
       render :index
     end
   end
 
   # PATCH/PUT /dicts/1
-  # PATCH/PUT /dicts/1.json
   def update
-    respond_to do |format|
-      if @dict.update(dict_params)
-        format.html { redirect_to @dict, notice: 'Dict was successfully updated.' }
-        format.json { render :show, status: :ok, location: @dict }
-      else
-        format.html { render :edit }
-        format.json { render json: @dict.errors, status: :unprocessable_entity }
+    if params[:dict][:dictname][0,1] == Dict::SIGIL_INTERNAL_DICT
+      flash.now[:error]="Dictionary names starting with  "+Dict::SIGIL_INTERNAL_DICT+" are for internal use only"
+      render :edit
+    else
+      respond_to do |format|
+        if @dict.update(dict_params)
+          format.html { redirect_to @dict, notice: 'Dict was successfully updated.' }
+        else
+          format.html { render :edit }
+        end
       end
     end
   end
