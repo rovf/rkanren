@@ -175,6 +175,9 @@ private
     targetdict_id=targetdict.id
     targetdict.transaction do
       logger.debug("+++++++++ merging from #{tempdict.dictname} into #{targetdict.dictname}")
+#      cards_to_add=tempdict.cards.to_a
+#      tempdict.cards=[]
+#      targetdict.cards += cards_to_add
       tempdict.cards.each do |c|
         c.update_attributes!(dict_id: targetdict_id)
         logger.debug("+++++++ merged: "+c.idioms.first.repres)
