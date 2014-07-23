@@ -196,3 +196,14 @@ $button_color_inner: red;
   clear: left;
   line-height: 0;
 }
+
+/* For debugging: Display current idiom score */
+.idiom_score {
+  background-color: #31efe7;
+  color: #442f3a;
+  margin: 16px;
+  padding: 2px;
+  font-size: 14px;
+  text-shadow: 7px 7px 8px #7bf7e6;
+  display: inline-block;
+}

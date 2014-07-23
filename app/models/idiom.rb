@@ -29,4 +29,8 @@ class Idiom < ActiveRecord::Base
     update_attributes!(repres: new_rep, note: new_note)
   end
 
+  def score
+    "#{level}/#{atari}"
+  end
+
 end

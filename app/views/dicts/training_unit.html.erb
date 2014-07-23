@@ -31,10 +31,15 @@ dicts/training_unit.html.erb
 
 <div class="clear"></div>
 
+<% if Rails.env.development? %>
+<span class="idiom_score"><%= starting_idiom.score %></span>
+<% end %>
+
 <% vis_style=['block']+['none']*(@idiom_sequence.length-1) %>
 <% @idiom_sequence.each_with_index do |kind,i| %>
 
   <div id="tu_idiom_<%= kind %>" style="display:<%= vis_style[i] %>">
+    <hr class="kanren_hr">
     <%= @idioms[kind].repres %>
   </div>
 
