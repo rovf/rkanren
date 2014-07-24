@@ -5,9 +5,11 @@ class IdiomsController < ApplicationController
   # params["judgement"] : "accept" or "reject"
   # @idiom and @dict set by before_action
   def update_score
-    accepted = { 'accept' => true, 'reject' => false}[params[:judgement]] or raise Exception.new("Unexpected :judgement parameter")
+    accepted = { 'accept' => true, 'reject' => false}[params['judgement']]
+    raise Exception.new("Unexpected :judgement parameter") if accepted.nil?
 
-    # set timestamp in idiom to indicate that it was asked now
+    # queried_time is already set before querying (otherwise, SKIP)
+    # would not work.
 
     # change the 'atari' by accepted:1 rejected:-1
     # if abs(atari) becomes too large(small), set atari to 0 and change

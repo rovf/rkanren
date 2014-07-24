@@ -19,7 +19,7 @@ dicts/training_unit.html.erb
 </script>
 
 <button onclick="unhide_next()" class="kanren_button" id="tsugi">次</button>
-<%= button_to 'SKIP','#', {method: :get, class: 'kanren_button', form_class: 'kanren_button_to_right'} %>
+<%= button_to 'SKIP',renshuu_path(@dict.id,current_kind), {method: :get, class: 'kanren_button', form_class: 'kanren_button_to_right'} %>
 
 <% starting_idiom=@idioms[@idiom_sequence[0]] %>
 <%= form_for starting_idiom, url: update_score_path(starting_idiom.id) do |f| %>

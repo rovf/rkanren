@@ -120,6 +120,7 @@ class DictsController < ApplicationController
       logger.debug("Card choosen: "+@card.inspect)
       # Model guarantees that idioms are sorted according to kind
       @idioms=@card.idioms.all
+      @idioms[kind].update_attributes!(queried_time: DateTime.now)
       @idiom_sequence=([kind]+Rkanren::QUERYSEQ[kind])[0,@idioms.length]
       render :training_unit
     end
