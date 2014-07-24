@@ -179,6 +179,21 @@ $button_color_inner: red;
   }
 }
 
+@mixin kanren-button-to($float) {
+  float: $float;
+  min-width:20%;
+  margin-right: 10px;
+  .kanren_button {
+    min-width:90%;
+  }
+}
+.kanren_button_to {
+  @include kanren-button-to(left)
+}
+.kanren_button_to_right {
+  @include kanren-button-to(right)
+}
+/*
 .kanren_button_to {
   float: left;
   min-width:20%;
@@ -187,6 +202,7 @@ $button_color_inner: red;
     min-width:90%;
   }
 }
+*/
 
 .RORlogo {
   vertical-align: bottom;

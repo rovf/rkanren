@@ -7,8 +7,7 @@ class IdiomsController < ApplicationController
   def update_score
     accepted = { 'accept' => true, 'reject' => false}[params[:judgement]] or raise Exception.new("Unexpected :judgement parameter")
 
-    # set timestamp in idiom to indicate that it was asked now (we should
-    # maybe better do this when presenting the idiom?
+    # set timestamp in idiom to indicate that it was asked now
 
     # change the 'atari' by accepted:1 rejected:-1
     # if abs(atari) becomes too large(small), set atari to 0 and change
