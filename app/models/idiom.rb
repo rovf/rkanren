@@ -24,6 +24,9 @@ class Idiom < ActiveRecord::Base
   validates :atari,
             presence: true
 
+  def count_same_kind_and_level(dict)
+    dict.idioms.where(kind: kind, level: level).count
+  end
 
   def update_user_data!(new_rep,new_note)
     update_attributes!(repres: new_rep, note: new_note)

@@ -56,4 +56,10 @@ module Rkanren
   # Maximum allowed number of entries per dict
   MAX_CARDS_PER_DICT=250
 
+  # Maximum allowed atari value (before switching levels)
+  MAX_ATARI=3
+
+  # Minimum level
+  MIN_LEVEL=1
+
 end

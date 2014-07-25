@@ -7,16 +7,40 @@ class IdiomsController < ApplicationController
   def update_score
     accepted = { 'accept' => true, 'reject' => false}[params['judgement']]
     raise Exception.new("Unexpected :judgement parameter") if accepted.nil?
+    accepted_boost=accepted ? 1 : -1
 
     # queried_time is already set before querying (otherwise, SKIP)
     # would not work.
 
+    # save old values for user feedback
+    old_atari=@idiom.atari
+    old_level=@idiom.level
+    new_level=old_level # default
+
     # change the 'atari' by accepted:1 rejected:-1
+    new_atari=old_atari+accepted_boost
+
     # if abs(atari) becomes too large(small), set atari to 0 and change
-    # the level by -1/+1, with the following pecularities:
-    # The level can not go below MINLEVEL (0?)
-    # If the number of word in the current level becomes 0, consolidate
-    # the levels.
+    # the level by -1/+1, with the pecularities listed below:
+    if new_atari.abs >= Rkanren::MAX_ATARI
+      new_atari=0
+      # The level can not go below MINLEVEL
+      new_level=[old_level-accepted_boost,Rkanren::MIN_LEVEL].max
+      # If the number of word in the current level becomes 0,
+      # consolidate the levels, unless we are already on the top
+      # level
+      if old_level != new_level
+        # Get number of entries at old_level for this kind
+        n_old_level=@idiom.count_same_kind_and_level(@dict)
+        logger.debug("entries at level #{old_level} : #{n_old_level}")
+
+
+
+
+      end
+
+    end
+
     # Update the max_level attribute, if necessary
 
     # TODO: Prepare next idiom
