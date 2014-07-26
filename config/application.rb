@@ -41,6 +41,7 @@ module Rkanren
   KIND_PP=['','カナ','漢字']
   # How to present a kind in the debug output.
   # It is guaranteed that all KIND_TXT elements have at least length 1
+  # and occur uniformly in the field names of the :dicts table.
   KIND_TXT=['gaigo','kana','kanji']
   # Each representation can have a note attached.
   KIND_REP_NOTE=KIND_TXT.map { |s| s+'_notes' }

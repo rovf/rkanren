@@ -5,6 +5,7 @@ class IdiomsController < ApplicationController
   # params["judgement"] : "accept" or "reject"
   # @idiom and @dict set by before_action
   def update_score
+    kind=@idiom.kind
     accepted = { 'accept' => true, 'reject' => false}[params['judgement']]
     raise Exception.new("Unexpected :judgement parameter") if accepted.nil?
     accepted_boost=accepted ? 1 : -1
@@ -30,22 +31,36 @@ class IdiomsController < ApplicationController
       # consolidate the levels, unless we are already on the top
       # level
       if old_level != new_level
-        # Get number of entries at old_level for this kind
+        # Get number of entries at old_level for this kind. If this is
+        # 1, this level will become empty and we need to consolidate
+        # levels. Exception: If we are already on the highest level.
         n_old_level=@idiom.count_same_kind_and_level(@dict)
         logger.debug("entries at level #{old_level} : #{n_old_level}")
+        old_max_level = @dict.max_level(kind)
+        if n_old_level <= 1 and new_level > old_max_level
+          # No level change necessary
+          new_level=old_level
+        else
+          if new_level > old_max_level
+            # Increase max level
+            @dict.update_max_level(kind,new_level)
+          end
+          # Move idiom to new level
+          @idiom.update_attributes!(level: new_level)
+          # If necessary, consolidate levels
+          # TODO
+          consolidate_levels(old_level) if n_old_level <= 1
+        end # if else Level change verified
+      end # if Level change requested
 
 
-
-
-      end
-
-    end
+    end # if atari exceeds maximum value
 
     # Update the max_level attribute, if necessary
 
     # TODO: Prepare next idiom
-    redirect_to renshuu_path(@dict,@idiom.kind)
-  end
+    redirect_to renshuu_path(@dict,kind)
+  end # update_score
 
   def edit
   end
@@ -66,6 +81,11 @@ private
       flash[:error]="No permission to modify other user's idioms"
       redirect_to root_path
     end
+  end
+
+  def consolidate_levels(empty_level)
+    # From idioms in empty_level+ 1 to max level: decrease levels
+    # in all idioms
   end
 
 end

@@ -32,13 +32,22 @@ class Dict < ActiveRecord::Base
   after_initialize do
     self.dictname=dictname.strip unless dictname.nil?
     self.language=language.strip unless language.nil?
-    self.max_level_kanji=0
-    self.max_level_kana=0
-    self.max_level_gaigo=0
+    Rkanren::KINDS.each do |kind|
+      kind_field_name=Dict.field_name_max_kind(kind)
+      self[kind_field_name]=0 if self[kind_field_name].nil?
+    end
   end
 
   def has_kind?(kind)
     idioms.where(kind: kind).exists?
+  end
+
+  def max_level(kind)
+    self[Dict.field_name_max_kind(kind)]
+  end
+
+  def update_max_level!(kind,new_level)
+    update_attributes!(Dict.field_name_max_kind(kind) => new_level)
   end
 
   # Create temporary dictionary for user
@@ -73,6 +82,12 @@ class Dict < ActiveRecord::Base
       end
     end
 
+  end
+
+private
+
+  def self.field_name_max_kind(kind)
+    'max_level_'+Rkanren::KIND_TXT[kind]
   end
 
 end
