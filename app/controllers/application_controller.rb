@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # Helpers are by default visible in views, but not in controllers
+  include ApplicationHelper
   include SessionsHelper
   include DictsHelper
 

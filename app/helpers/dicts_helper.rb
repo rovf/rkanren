@@ -45,9 +45,14 @@ module DictsHelper
     # We sort with descending "probability", i.e. cards with
     # high probabilities come first
     cand_vectors.sort! { |v0, v1| v1 <=> v0 }
-    logger.debug("Sorted candidate vectors")
-    cand_vectors.each { |ve| logger.debug('+++ ' + ve.to_s + '/' + cand_idioms[ve[-1]].repres)}
-    selected_card=candidates[cand_vectors[0][-1]] # DUMMY . We need to do a clever random selection here
+    logger.debug("Sorted candidate vectors for time #{tsshow(now)} dict: #{d.dictname} kind: #{kind}")
+    cand_vectors.each do |ve|
+      # The last ve element is the idiom id
+      id=cand_idioms[ve[-1]]
+      logger.debug('+++ ' + ve.to_s + "/#{id.id}:#{id.repres}(#{id.card_id}) #{tsshow(id.queried_time)}")
+    end
+    selected_card=candidates[cand_vectors[0][-1]]
+    logger.debug("++++++++ dicts_helper / choose_card_for_dict TODO: We need to do a clever random selection here")
     logger.debug('selected card id='+selected_card.id.to_s)
     selected_card
   end
@@ -68,15 +73,16 @@ private
     # Low numbers in the vector mean low probability for being selected.
     # Vector elements are compared left to right. The most important
     # criterion should come first.
-    # TO DO: Add difficulty of card
     [
-      # Exclude very recently asked cards if possible
+      # Exclude just recently asked cards if possible
       has_been_asked_recently ? 0 : 1,
       # Include cards which have not been asked for long time, if possible
       has_not_been_asked_for_very_long_time ? 1 : 0,
       has_not_been_asked_for_long_time ? 1 : 0,
       idiom.last_queried_successful ? 0 : 1,
+      idiom.level,
       4711, # additional fields should go here
+      idiom.atari == 0 ? 0 : 1, # experimental
       orig_pos, # Must come last. Index in original candidates array
     ]
   end

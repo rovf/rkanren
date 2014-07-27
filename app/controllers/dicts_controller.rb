@@ -121,6 +121,7 @@ class DictsController < ApplicationController
       # Model guarantees that idioms are sorted according to kind
       @idioms=@card.idioms.all
       @idioms[kind].update_attributes!(queried_time: DateTime.now)
+      logger.debug("+++++++ queried_time for idiom #{@idioms[kind].repres} set to #{tsshow(@idioms[kind].queried_time)}")
       @idiom_sequence=([kind]+Rkanren::QUERYSEQ[kind])[0,@idioms.length]
       render :training_unit
     end
