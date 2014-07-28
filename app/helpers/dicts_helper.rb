@@ -39,6 +39,11 @@ module DictsHelper
     #   debugging purposes.
     cand_idioms = candidates.map {|c| c.idioms.first}
     cand_vectors = cand_idioms.map.with_index { |id,idx| vector_in_sort_space(now,id,idx)}
+    # TODO: Remove from cand_vectors those, which have been asked already
+    # during the past, say, 3 minutes, as long as the vector does not
+    # become empty.
+    # TODO: Shortcut, if the vector has length 1
+    logger.debug("+++++++ TODO dicts_helper vector optimizations")
     # A card should be asked with higher probability if:
     #   - it wasn't asked for long time
     #   - if it is a difficult card
@@ -51,8 +56,7 @@ module DictsHelper
       id=cand_idioms[ve[-1]]
       logger.debug('+++ ' + ve.to_s + "/#{id.id}:#{id.repres}(#{id.card_id}) #{tsshow(id.queried_time)}")
     end
-    selected_card=candidates[cand_vectors[0][-1]]
-    logger.debug("++++++++ dicts_helper / choose_card_for_dict TODO: We need to do a clever random selection here")
+    selected_card=candidates[cand_vectors[biased_random(cand_vectors.length)][-1]]
     logger.debug('selected card id='+selected_card.id.to_s)
     selected_card
   end
@@ -85,6 +89,35 @@ private
       idiom.atari == 0 ? 0 : 1, # experimental
       orig_pos, # Must come last. Index in original candidates array
     ]
+  end
+
+  # choose a random number from 0..(n-1), giving lower numbers higher
+  # probability
+  def biased_random(n)
+    # For the time being, we make the bias hard-coded. Maybe it could
+    # become a user property one day.
+    # The bias is represented by a constant bias_prob, which is a number
+    # greater than 0 and less than 100 (think of it as probability given
+    # as a percentage value). bias_prob > 50 gives preference
+    # to lower numbers (which is what we want to have), and the larger
+    # it is, the stronger is the preference for lower numbers. For
+    # bias_prob == 50, all numbers in the range would have, in theory,
+    # equal chance, but due to the sloppy implementation of this function,
+    # this is only correct if n is a power of 2.
+    bias_prob=75
+    low=0
+    high=n-1
+    # A recursive solution would be most elegant, but we have no control
+    # over the size of n.
+    while low<high
+      split=(high+low)/2 # rounded down!
+      if rand(100) < bias_prob
+        high=split
+      else
+        low=split
+      end
+    end
+    low
   end
 
   def verified_dict(dictid=nil)
