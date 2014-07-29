@@ -28,6 +28,7 @@ module DictsHelper
       includes(:idioms).
       references(:idioms).
       where("dict_id=#{to_dict_id d} and kind=#{kind}").to_a
+    #
     now=DateTime.now
     # candidates.sort! do |card0,card1|
     #     idioms=[card0,card1].map {|c| c.idioms.first}
@@ -38,25 +39,35 @@ module DictsHelper
     # - we will need the vector after it has been calculated, for
     #   debugging purposes.
     cand_idioms = candidates.map {|c| c.idioms.first}
-    cand_vectors = cand_idioms.map.with_index { |id,idx| vector_in_sort_space(now,id,idx)}
-    # TODO: Remove from cand_vectors those, which have been asked already
-    # during the past, say, 3 minutes, as long as the vector does not
-    # become empty.
-    # TODO: Shortcut, if the vector has length 1
-    logger.debug("+++++++ TODO dicts_helper vector optimizations")
+    cand_vectors = cand_idioms.map.with_index { |id,idx| vector_in_sort_space(now,id,idx) }
+    #
     # A card should be asked with higher probability if:
     #   - it wasn't asked for long time
     #   - if it is a difficult card
     # We sort with descending "probability", i.e. cards with
     # high probabilities come first
     cand_vectors.sort! { |v0, v1| v1 <=> v0 }
+    #
+    # Debug output
     logger.debug("Sorted candidate vectors for time #{tsshow(now)} dict: #{d.dictname} kind: #{kind}")
     cand_vectors.each do |ve|
       # The last ve element is the idiom id
       id=cand_idioms[ve[-1]]
       logger.debug('+++ ' + ve.to_s + "/#{id.id}:#{id.repres}(#{id.card_id}) #{tsshow(id.queried_time)}")
     end
-    selected_card=candidates[cand_vectors[biased_random(cand_vectors.length)][-1]]
+    #
+    # Remove from cand_vectors those, which are suggested for
+    # deletion, but ensure that we have at least one card left.
+    # The cards proposed for deletion must be at the end of the
+    # last, because the deletion-suggestion-field is the first
+    # in each card vector.
+    index_of_first_to_be_deleted = cand_vectors.find_index { |ve| ve[0]==0 }
+    cand_vectors.slice!(index_of_first_to_be_deleted..-1) unless index_of_first_to_be_deleted.nil? or index_of_first_to_be_deleted==0
+    #
+    # Select one card at random, giving cards with lower cand_vectors
+    # index higher probability
+    selected_card = candidates[cand_vectors[biased_random(cand_vectors.length)][-1]]
+    #
     logger.debug('selected card id='+selected_card.id.to_s)
     selected_card
   end
@@ -66,7 +77,8 @@ private
   THE_BEGINNING = DateTime.strptime('0','%s') # start of epoch
   VERY_LONG_TIME_AGO = 14.days
   LONG_TIME_AGO = 1.day
-  JUST_RECENTLY = 5.minutes
+  JUST_RECENTLY = 8.minutes
+  NEARLY_RIGHT_NOW = 128.seconds
 
   def vector_in_sort_space(now,idiom,orig_pos)
     accessed = idiom.queried_time || THE_BEGINNING
@@ -74,10 +86,18 @@ private
     has_not_been_asked_for_very_long_time = now.ago(VERY_LONG_TIME_AGO) > accessed
     has_not_been_asked_for_long_time = now.ago(LONG_TIME_AGO) > accessed
     has_been_asked_recently = now.ago(JUST_RECENTLY) <= accessed
+    # Maybe we could add a test of whether the last idiom asked
+    # was identical to the one we are asking now, independent of
+    # the time?
+    should_be_omitted = now.ago(NEARLY_RIGHT_NOW) <= accessed
     # Low numbers in the vector mean low probability for being selected.
     # Vector elements are compared left to right. The most important
     # criterion should come first.
     [
+      # The first element is 0 if this card should be omitted if
+      # possible. Card omission is not always possible, because we
+      # might end up having no cards at all.
+      should_be_omitted ? 0 : 1,
       # Exclude just recently asked cards if possible
       has_been_asked_recently ? 0 : 1,
       # Include cards which have not been asked for long time, if possible
@@ -110,7 +130,7 @@ private
     # A recursive solution would be most elegant, but we have no control
     # over the size of n.
     while low<high
-      split=(high+low)/2 # rounded down!
+      split = (high+low) / 2 # rounded down!
       if rand(100) < bias_prob
         high=split
       else

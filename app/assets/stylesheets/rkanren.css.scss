@@ -6,7 +6,7 @@ $japanese_mono:"Osaka Monospaced";
 $button_font_size:15px;
 
 /*
-#371e19 #5f3ae2 #855536 #d9a8f2
+ #5f3ae2 #855536 #d9a8f2
 */
 
 $klogofontsize:150%;
@@ -211,6 +211,28 @@ $button_color_inner: red;
 .clear {
   clear: left;
   line-height: 0;
+}
+
+.explain {
+  font-size:65%;
+  background-color: #d63a92;
+  resize: both;
+  box-sizing: border-box;
+  float: right;
+  width: 33%;
+  margin: 0 0 0 14px;
+  padding: 1px 0 0 2px;
+  outline: 3px solid #e1b711;
+  outline-offset: 6px;
+  border: 2px solid #ee7378;
+  a {
+    text-decoration: none;
+    color: inherit;
+    &:hover {
+      color: #35d4e6;
+      background:linear-gradient(to right,#7a4ec7,#e22af2,#371e19);
+    }
+  }
 }
 
 /* For debugging: Display current idiom score */
