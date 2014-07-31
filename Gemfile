@@ -23,6 +23,8 @@ group :development, :test do
 end
 # gem 'sqlite3'
 
+gem 'random_password_generator', '1.0.0'
+
 # In order to use Heroku for deploying to production, we need Postgres
 group :production do
   gem 'pg', '0.15.1'

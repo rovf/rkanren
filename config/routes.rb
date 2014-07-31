@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   match '/login', to: 'sessions#new', via: 'get'
   match '/logout',to:'sessions#destroy', via: 'delete'
   match '/work_as_guest', to:'sessions#become_guest', via: 'delete'
+  #match '/password_reminder', to: 'sessions#password_reminder', via: 'post'
   match '/renshuu/:id/:kind', to:'dicts#start_training', via: 'get', as: :renshuu
   match '/update_score/:id', to:'idioms#update_score', via: 'patch', as: :update_score
 

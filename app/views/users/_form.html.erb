@@ -1,10 +1,13 @@
 <!-- Registration form for new users -->
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p>
+<div class="clear"></div>
+<% end %>
 <hr class="kanren_hr">
 <%= form_for(@user) do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
       <ul>
       <% @user.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -12,7 +15,9 @@
       </ul>
     </div>
   <% end %>
-
+  <div class="explain">
+    The email address is optional. It is only used to send you a new password in case you forgot yours.
+  </div>
   <div class="field">
     <%= f.label :name, 'User ID' %>
     <%= f.text_field :name, class: 'user_mgt_req_entry', maxlength:24, size:24 %>

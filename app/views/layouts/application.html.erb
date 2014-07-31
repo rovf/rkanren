@@ -12,10 +12,10 @@
 <body>
 <div class="head_status">
   Current User: <%= current_user_name %>
-  <%= current_user_is_guest? ? link_to('Login', login_path, method: 'get') : link_to('Logout', logout_path, method: 'delete') %>
+  <%= current_user_is_guest? ? link_to('Login', login_path, method: 'get') : link_to('Profile', current_user, method: 'patch') + ' | ' + link_to('Logout', logout_path, method: 'delete') %>
 </div>
 <% flash.each do |key, value| %>
-  <div class="alert alert-<%= key %>"><%= value %></div>
+  <div class="alert alert-<%= key %>"><span><%= value %></span></div>
 <% end %>
 <canvas height="6px"></canvas>
 <%= yield %>

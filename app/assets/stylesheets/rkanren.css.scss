@@ -213,6 +213,31 @@ $button_color_inner: red;
   line-height: 0;
 }
 
+.alert-error {
+  color: red;
+  background-color:  #144213;
+  font-size: 75%;
+}
+
+.alert-success {
+  color: #2dbc13;
+  padding: 1px 0 2px 1px;
+  font-size: 75%;
+  font-weight: lighter;
+  font-style: oblique;
+  span {
+    display: inline-flex;
+    border-style: ridge;
+    border-width: 2px;
+    border-color: #ae6733;
+    padding-right: 3px;
+  }
+}
+
+.alert-notice {
+  color: #e472c9;
+}
+
 .explain {
   font-size:65%;
   background-color: #d63a92;

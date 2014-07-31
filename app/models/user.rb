@@ -17,6 +17,12 @@ class User < ActiveRecord::Base
     self.email=email.strip.downcase unless email.nil?
   end
 
+  def new_random_password!
+    new_pwd = RandomPasswordGenerator.generate(16, :skip_symbols => true, :skip_upper_case => true, :skip_numbers => true) + RandomPasswordGenerator.generate(4, :skip_lower_case => true, :skip_upper_case => true, :skip_symbols => true)
+    update_attributes!(password: new_pwd)
+    new_pwd
+  end
+
   def self.guestname
     '{guest}'
   end
@@ -59,5 +65,6 @@ class User < ActiveRecord::Base
   def self.guestid
     guest.id
   end
+
 
 end

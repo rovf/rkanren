@@ -1,5 +1,8 @@
 <!-- login form -->
 <canvas height="24px"></canvas>
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p>
+<% end %>
 <div class="page_prompt">
 Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</span>, or
   &nbsp;<span class="larger_font"><b><%= link_to 'register',new_user_path %></b></span>, if you haven't done so yet, or <%= link_to 'continue', controller: 'dicts' %> as a unregistered guest user.
@@ -17,8 +20,10 @@ Log in to <span class="kanrenlogo">&nbsp;&nbsp;&nbsp;rkanren&nbsp;&nbsp;&nbsp;</
       <%= f.password_field :password, class: 'user_mgt_req_entry' %>
     </div>
     <div class="centered">
-      <%= f.submit 'Log in now', class: "kanren_button" %>
+      <%# link_to "Can't remember the password!", password_reminder_path, {class: 'pseudo_button', method: 'get'} %>
+      <%= f.submit 'Log in now', class: "kanren_button", name: 'LOGIN' %>
       <%= link_to 'Use this site as a guest user', work_as_guest_path, {class: 'pseudo_button', method: 'delete'} %>
+      <%= f.submit "Can't remember the password!", class: 'kanren_button', name: 'FORGOT_PWD' %>
     </div>
   <% end %>
 </div>
