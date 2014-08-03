@@ -1,5 +1,15 @@
 <h1>Editing user</h1>
 
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p>
+<% end %>
+
+<div class="explain">
+  You can leave the password fields empty, if you don't want to
+  change your password.
+</div>
+<div class="clear"></div>
+
 <%= render 'form' %>
 
 <%= link_to 'Show', @user %> |

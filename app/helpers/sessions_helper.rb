@@ -8,6 +8,10 @@ module SessionsHelper
     end
   end
 
+  def set_new_name_for_current_user(new_name)
+    session[:currentUser]=new_name
+  end
+
   def drop_current_user
     session[:currentUser]=nil
     session[:currentUserId]=User.guestid

@@ -1,4 +1,4 @@
-<!-- Registration form for new users -->
+<!-- Registration form for new users and editing a user -->
 <% if Rails.env.development?%>
 <p class="debug_dump debug_info"><%= __FILE__ %></p>
 <div class="clear"></div>
@@ -21,7 +21,7 @@
   <div class="field">
     <%= f.label :name, 'User ID' %>
     <%= f.text_field :name, class: 'user_mgt_req_entry', maxlength:24, size:24 %>
-    <small>(required, case insensitive)</small>&nbsp; &nbsp; &nbsp;
+    <small>(required, case insensitive)</small>&nbsp; &nbsp; &nbsp;<br>
     <%= f.label :email %>
     <%= f.text_field :email, class: 'user_mgt_opt_entry', size:48, maxlength:128 %>
   </div>

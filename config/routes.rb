@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   match '/renshuu/:id/:kind', to:'dicts#start_training', via: 'get', as: :renshuu
   match '/update_score/:id', to:'idioms#update_score', via: 'patch', as: :update_score
 
+  match '/tester', to: 'static_pages#tester', via: 'get'
+
   resources :dicts do
     resources :cards
     resources :upload, only: [:index] do

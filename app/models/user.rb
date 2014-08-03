@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
             presence: true,
             length: { minimum: 2, maximum: 24 }
 
-  validates :password, length: {minimum: 4}
+  validates :password, length: {minimum: 4}, if: :password
 
   after_initialize do
     self.name=name.strip.downcase unless name.nil?
