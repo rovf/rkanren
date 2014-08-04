@@ -1,4 +1,7 @@
 <!-- Dictionary Control Center -->
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p>
+<% end %>
 
 <p>
   Working with dictionary <strong><%= @dict.dictname %></strong>
@@ -45,6 +48,7 @@
 
 <%= link_to 'Change name or type/language', edit_dict_path(@dict) %> |
 <%= link_to 'Back', dicts_path %> |
+<%= link_to 'Make this dictionary world-readable', '#' %>
 <% if current_userid_is_guest? %>
   <%= link_to 'Vote for deletion', '#' %>
 <% else %>

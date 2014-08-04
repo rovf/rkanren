@@ -60,4 +60,22 @@ module SessionsHelper
     session[:kind]
   end
 
+  def send_mail(to, subject, body)
+    msg = <<EOM
+From: #{Figaro.env.smtp_from}
+To: <#{to}>
+Subject: #{subject}
+
+#{body}
+EOM
+    # Credentials defined in application.yml
+    Net::SMTP.start(
+      Figaro.env.smtp_server,
+      Figaro.env.smtp_port,
+      'localhost', # HELO domain
+      Figaro.env.smtp_user,
+      Figaro.env.smtp_pass,
+      :login) { |smtp| smtp.send_mail msg,Figaro.env.smtp_from,to }
+  end
+
 end

@@ -31,9 +31,8 @@ class SessionsController < ApplicationController
     elsif mailaddr =~ /@(.+)[.]\w+$/
       mail_domain=$1
       newpwd=user.new_random_password!
-      logger.debug("TODO: send E-Mail")
-      flash.now[:success]="An email with the new password has been sent to your #{mail_domain} account"+
-      ". MAIL SENDING NOT IMPLEMENTED YET. YOUR NEW PASSWORD IS: "+newpwd
+      send_mail(mailaddr,'rkanren password reset',"New password:\n#{newpwd}")
+      flash.now[:success]="An email with the new password has been sent to your #{mail_domain} account"
       render 'new'
     else
       flash[:error]='No email sent, because mail address is invalid: "'+mailaddr+'"'
