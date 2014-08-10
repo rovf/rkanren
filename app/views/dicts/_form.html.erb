@@ -1,3 +1,7 @@
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p>
+<div class="clear"></div>
+<% end %>
 <%= form_for(@dict) do |f| %>
   <% if @dict.errors.any? %>
     <div id="error_explanation">
@@ -18,6 +22,10 @@
   <div class="field">
     <%= f.label :language, 'Change Type/Language' %><br>
     <%= f.text_field :language %>
+  </div>
+  <div class="field">
+    <%= f.label :world_readable, 'Public' %>
+    <%= f.check_box :world_readable %>
   </div>
   <div class="actions">
     <%= f.submit value="Apply Changes", class: 'kanren_button' %>

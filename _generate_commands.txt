@@ -1,6 +1,6 @@
 rails generate scaffold User name:string:index email:string password_digest:string
 
-rails generate scaffold Dict 'dictname:string{16}:index' user:references accessed:datetime 'language:string{32}' 'max_level_kanji:integer{2}' 'max_level_kana:integer{2}' 'max_level_gaigo:integer{2}'
+rails generate scaffold Dict 'dictname:string{16}:index' user:references accessed:datetime 'language:string{32}' 'max_level_kanji:integer{2}' 'max_level_kana:integer{2}' 'max_level_gaigo:integer{2}' world_readable:boolean
 
 rails generate controller Home init
 

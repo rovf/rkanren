@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711131400) do
+ActiveRecord::Schema.define(version: 20140810100753) do
 
   create_table "cards", force: true do |t|
     t.integer  "dict_id"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20140711131400) do
     t.integer  "max_level_gaigo", limit: 3
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "world_readable"
   end
 
   add_index "dicts", ["dictname"], name: "index_dicts_on_dictname"

@@ -57,9 +57,7 @@ class DictsController < ApplicationController
 
   # POST /dicts
   def create
-    logger.debug('DictsController create: '+params.inspect)
-    # Next line needs to be fixed, when we have user authentification
-    dict_params.permit(:user_id,:dictname,:language)
+    dict_params.permit(:dictname,:language,:world_readable)
     logger.debug('dict_params after:'+dict_params.inspect)
     @dict = Dict.new(dict_params)
     @dict.user_id=current_user_id
@@ -136,7 +134,7 @@ class DictsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dict_params
-      params.require(:dict).permit(:dictname, :user_id, :accessed, :language, :max_level_kanji, :max_level_kana, :max_level_gaigo)
+      params.require(:dict).permit(:dictname, :user_id, :accessed, :language, :max_level_kanji, :max_level_kana, :max_level_gaigo, :world_readable)
     end
 
 end

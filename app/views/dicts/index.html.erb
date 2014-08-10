@@ -12,27 +12,33 @@
 <%= form_for @dict, url: dicts_path, enforce_utf8:true do |d| %>
 
 
-<% if @dict.errors.any? %>
-<div id="error_explanation">
-  <h2><%= pluralize(@dict.errors.count, "error") %> prohibited this dict from being saved:</h2>
+  <% if @dict.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@dict.errors.count, "error") %> prohibited this dict from being saved:</h2>
 
-  <ul>
-    <% @dict.errors.full_messages.each do |message| %>
-    <li><%= message %></li>
-    <% end %>
-  </ul>
-</div>
-<% end %>
+    <ul>
+      <% @dict.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
 
+  <div class="explain">
+    A public dictionary can be imported by everyone. By default, your dictionary is private, i.e. only visible by your. Even with a public dictionary, only <em>you</em> can modify it.
+  </div>
 
-
-  <%= d.label(:dictname,'Dictionary:') %>
+  <%= d.label(:dictname,'Name:') %>
   <%= d.text_field(:dictname, maxlength: 16, class:"dict_name_entry") %>
   &nbsp;&nbsp;
   <%= d.label(:language,'Type/Language:') %>
-  <%= d.text_field(:language, value: 'Deutsch', maxlength: 32, size: 32, class: 'language_field') %>
+  <%= d.text_field(:language, value: 'Deutsch', maxlength: 32, size: 16, class: 'language_field') %>
+  &nbsp;&nbsp;
+  Public: <%= d.check_box :world_readable %>
   <%= d.submit(value="CREATE", class: 'kanren_button', name: 'create') %>
+
 <%  end %>
+<div class="clear"></div>
 
 <hr class="kanren_hr">
 
