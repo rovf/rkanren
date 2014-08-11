@@ -24,7 +24,7 @@ doc/
 .idea
 .secret
 .keep
-secret.yml
+secrets.yml
 
 
 # Ignore application configuration
