@@ -24,7 +24,8 @@ doc/
 .idea
 .secret
 .keep
-secrets.yml
+# It's OK, not production secret key in secrets.yml'
+# secrets.yml
 
 
 # Ignore application configuration
