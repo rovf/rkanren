@@ -125,6 +125,27 @@ class DictsController < ApplicationController
     end
   end
 
+  # User requested importing a different dictionary to the current one
+  def select_for_import
+    # select_for_import is defined inside resource nesting. The
+    # id of the dictionary is not passed in :id, as usual, but
+    # in :dict_id
+    with_verified_dict(params[:dict_id],root_path) do |d|
+      # Get all dictionary for this user. We can use the user from
+      # the session, or the one recorded in d. Because of the
+      # verification, they must be the same. Do not include d.
+      the_other_dicts_of_same_user(d)
+      # Add public dictionaries from the other users
+      public_dicts_of_other_users(d)
+      # Sort the list
+
+      # Prepare for pagination
+
+      flash.now[:error]='Not implemented yet 大麦'
+      render # select_for_import
+    end
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

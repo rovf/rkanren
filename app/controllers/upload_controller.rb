@@ -6,6 +6,11 @@ class UploadController < ApplicationController
     end
   end
 
+  def import_dict
+    flash.now[:error]="Not implemente yet 小麦"
+    render 'index'
+  end
+
   # The "upload" parameter contains the uploaded file.
   # The "duplicates" parameter indicates what should happen with
   # idioms, which occur in both the uploaded file and the dictionary.

@@ -27,10 +27,12 @@ Rails.application.routes.draw do
   match '/tester', to: 'static_pages#tester', via: 'get'
 
   resources :dicts do
+    get :select_for_import  # Nested. ID will be passed as :dict_id
     resources :cards
     resources :upload, only: [:index] do
       member do
         post :upload_file
+        post :import_dict
       end
     end
 

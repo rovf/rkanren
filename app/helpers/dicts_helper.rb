@@ -72,6 +72,15 @@ module DictsHelper
     selected_card
   end
 
+  def the_other_dicts_of_same_user(d)
+    User.find_by_id(d.user_id).dicts.where("id != #{d.id}")
+  end
+
+  def public_dicts_of_other_users(d)
+    logger.debug("++++++++++ This is not tested yet (public_dicts_of_other_users)")
+    Dict.where("user_id != #{d.user_id} and world_readable")
+  end
+
 private
 
   THE_BEGINNING = DateTime.strptime('0','%s') # start of epoch
