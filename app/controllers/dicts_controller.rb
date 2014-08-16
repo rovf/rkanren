@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 class DictsController < ApplicationController
 
   include ActionView::Helpers::TextHelper
@@ -131,17 +133,17 @@ class DictsController < ApplicationController
     # id of the dictionary is not passed in :id, as usual, but
     # in :dict_id
     with_verified_dict(params[:dict_id],root_path) do |d|
+      @dict=d
       # Get all dictionary for this user. We can use the user from
       # the session, or the one recorded in d. Because of the
       # verification, they must be the same. Do not include d.
-      the_other_dicts_of_same_user(d)
-      # Add public dictionaries from the other users
-      public_dicts_of_other_users(d)
-      # Sort the list
-
-      # Prepare for pagination
-
-      flash.now[:error]='Not implemented yet 大麦'
+      @dicts = (the_other_dicts_of_same_user(d) +
+        # Add public dictionaries from the other users
+        public_dicts_of_other_users(d)).
+        # Sort the list
+        sort { |d1,d2| d1.dictname <=> d2.dictname } .
+        # Prepare for pagination
+        paginate(:page => params[:page], :per_page => 12)
       render # select_for_import
     end
   end

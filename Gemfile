@@ -13,7 +13,7 @@ gem 'faker' # ,'1.1.2'
 
 # For paginating large data sets in an easy way
 gem 'will_paginate','3.0.4'
-gem 'bootstrap-will_paginate', '0.0.9'
+# gem 'bootstrap-will_paginate', '0.0.9'
 
 
 # Use sqlite3 as the database for Active Record

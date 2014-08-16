@@ -7,8 +7,20 @@ class UploadController < ApplicationController
   end
 
   def import_dict
-    flash.now[:error]="Not implemente yet 小麦"
-    render 'index'
+      with_verified_dict(params[:dict_id],root_path) do |target_dict|
+        @dict=target_dict
+        source_dict=Dict.find_by_id(params[:id])
+        if source_dict.nil?
+          flash[:error]="The selected directory does not exist anymore"
+          redirect_to dict_select_for_import_path(target_dict.id)
+        elsif source_dict.world_readable or source_dict.user_id == current_user_id
+          flash[:error]="Not implemente yet 小麦"
+          redirect_to dict_select_for_import_path(target_dict.id)
+        else
+          logger.warn("Someone is trying to steal a dictionary! current user = #{current_user_id}")
+          redirect_to root_path
+        end
+      end
   end
 
   # The "upload" parameter contains the uploaded file.

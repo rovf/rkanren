@@ -20,6 +20,39 @@ $klogofontsize:150%;
   padding: 0 4px 2px 1px;
 }
 
+$pag_hor_pad: 4px;
+.pagination {
+  font-size: 16px;
+  color: #b9f0b6;
+  border: 6px groove #540ab9;
+  padding-bottom: 2px;
+  padding-left: $pag_hor_pad;
+  padding-right: $pag_hor_pad;
+  width:auto;
+  display: inline-flex;
+  margin-top: 6px;
+  margin-bottom: 2px;
+  .disabled {
+    visibility: hidden;
+  }
+  .current {
+    padding-left: $pag_hor_pad;
+    padding-right: $pag_hor_pad;
+  }
+  a {
+    padding-left: $pag_hor_pad;
+    padding-right: $pag_hor_pad;
+  }
+  .previous_page, .next_page {
+    font-size: 32px;
+    text-decoration: none;
+    &:hover, &:active {
+      font-weight: bold;
+      color: #286ce5;
+      background-color: transparent;
+    }
+  }
+}
 
 .page_prompt {
   border-style: solid dotted solid dotted;

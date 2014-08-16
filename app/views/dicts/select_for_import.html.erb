@@ -1,3 +1,10 @@
 <% if Rails.env.development?%>
 <p class="debug_dump debug_info"><%= __FILE__ %></p><div class="clear"></div>
 <% end %>
+
+Choose a dictionary to be merged into <%= @dict.dictname %>:
+
+<%= render @dicts %>
+
+<br>
+<%= will_paginate @dicts, :renderer => WillPaginate::ActionView::LinkRenderer, :previous_label => '⥒' , :next_label => ' ⥓' %>
