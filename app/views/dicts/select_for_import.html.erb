@@ -7,4 +7,5 @@ Choose a dictionary to be merged into <%= @dict.dictname %>:
 <%= render @dicts %>
 
 <br>
+
 <%= will_paginate @dicts, :renderer => WillPaginate::ActionView::LinkRenderer, :previous_label => '⥒' , :next_label => ' ⥓' %>

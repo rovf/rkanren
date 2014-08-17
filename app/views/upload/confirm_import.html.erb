@@ -1,0 +1,25 @@
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p><div class="clear"></div>
+<% end %>
+
+<%= form_tag({action: 'import_dict', dict_id: @dict.id, id: @from_dict.id}) do %>
+
+About to merge the content of of <%= @from_dict.dictname %>
+<% if @from_dict.user_id != @dict.user_id %>
+  <% other_user= User.find_by_id(@from_dict.user_id) %>
+  (owned by user <%= other_user.nil? ? '"OHGOTTWOISTERDENN"' : other_user.name %>)
+<% end %>
+into <%= @dict.dictname %>.<br>
+<hr class="kanren_hr">
+
+<span>What should be done, if an idiom in the selected dictionary is already present in your dictionary?</span>
+<ul style="list-style-type:none">
+  <li><%= radio_button_tag 'duplicates', 'ignore', true %>&nbsp;Keep the version from your dictionary</li>
+  <li><%= radio_button_tag 'duplicates', 'overwrite', false %>&nbsp;Replace the version in your dictionary by the one in the imported dictionary</li>
+</ul>
+<hr class="kanren_hr">
+
+<%= submit_tag "Don't Wait! Go Ahead!", {class: 'kanren_button'} %>
+<%= submit_tag 'CANCEL', class: 'kanren_button', name: 'cancel' %>
+
+<% end %>

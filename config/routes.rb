@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       member do
         post :upload_file
         post :import_dict
+        get  :confirm_import
       end
     end
 

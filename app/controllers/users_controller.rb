@@ -25,7 +25,7 @@
   # POST /users
   def create
     @user = User.new(user_params)
-    if @user.name =~ /^[\w\d]/
+    if @user.name =~ /^[\w\d][^<>]/
       respond_to do |format|
         if @user.save
           drop_current_user
@@ -36,7 +36,7 @@
         end
       end
     else
-      flash.now[:error]="User name must start with a letter, underscore or digit"
+      flash.now[:error]="User names must start with a letter, underscore or digit, and must not contain angle brackets"
       render :new
     end
   end

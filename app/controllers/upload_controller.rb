@@ -6,6 +6,24 @@ class UploadController < ApplicationController
     end
   end
 
+  def confirm_import
+    with_verified_dict(params[:dict_id],root_path) do |target_dict|
+      @dict=target_dict
+      @from_dict=Dict.find_by_id(params[:id])
+      if @from_dict.nil?
+          flash[:error]="The selected directory does not exist anymore"
+          redirect_to dict_select_for_import_path(target_dict.id)
+      else
+        render
+      end
+    end
+  end
+
+  # params:
+  #  dict_id : the dictionary which receives the new idioms
+  #  id : the dictionary where the new idioms come from
+  #  duplicates : What to do with duplicate terms. Only "ignore"
+  # and "overwrite" are permitted.
   def import_dict
       with_verified_dict(params[:dict_id],root_path) do |target_dict|
         @dict=target_dict
@@ -14,6 +32,10 @@ class UploadController < ApplicationController
           flash[:error]="The selected directory does not exist anymore"
           redirect_to dict_select_for_import_path(target_dict.id)
         elsif source_dict.world_readable or source_dict.user_id == current_user_id
+          duplicates_treatment=(params[:duplicates]||'reject').to_sym
+          # No need to do a transaction here. If import aborts for whatever reason,
+          # the user can simply rerun it. Reason:
+
           flash[:error]="Not implemente yet 小麦"
           redirect_to dict_select_for_import_path(target_dict.id)
         else
@@ -26,7 +48,10 @@ class UploadController < ApplicationController
   # The "upload" parameter contains the uploaded file.
   # The "duplicates" parameter indicates what should happen with
   # idioms, which occur in both the uploaded file and the dictionary.
-  # Possible values: "reject", "ignore", "overwrite"
+  # Possible values:
+  #     "reject" - reject the whole upload, if a duplicate is found
+  #     "ignore" - skip the idiom, if it is already in the dictionary
+  #     "overwrite" - overwrite the idiom in the dictionary with the new value
   def upload_file
     # TODO: Think about the following algorithm. Maybe we can do
     # the "merging" easier by just changing the dict_id in the

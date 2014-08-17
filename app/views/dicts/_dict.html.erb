@@ -2,5 +2,5 @@
   <% if dict.user_id != @dict.user_id %>
     *
   <% end %>
-  <%= link_to dict.dictname, import_dict_dict_upload_path(@dict.id,dict.id), method: 'post' %>
+  <%= link_to dict.dictname, confirm_import_dict_upload_path(@dict.id,dict.id), method: 'get' %>
 </p>
