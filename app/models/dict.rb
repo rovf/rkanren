@@ -50,6 +50,17 @@ class Dict < ActiveRecord::Base
     update_attributes!(Dict.field_name_max_kind(kind) => new_level)
   end
 
+  # Returns a Set of card ids, where one of the definitions in
+  # card are already in this dictionary
+  def clashing_with(card)
+    result=Set.new # no require 'set' needed (already included)
+    card_idioms=card.idioms
+    Rkanren::KINDS.each do |k|
+      result.merge(idioms.where(kind: k, repres: card_idioms[k].repres).map { |idiom| idiom.card_id })
+    end
+    result
+  end
+
   # Create temporary dictionary for user
   def self.tempdict(user)
     tempname=(SIGIL_INTERNAL_DICT+UniqueId.gen_tempdict_uid+'_'+user.name)[0,DICTNAME_MAXLEN]

@@ -26,13 +26,7 @@ class CardsController < ApplicationController
       @idioms=[]
       @notes=idiom_notes # for redisplaying in case of error
       @card.n_repres.times do |kind|
-        @idioms[kind]=Idiom.new(
-          repres: @rep[kind],
-          card_id: @card.id,
-          note: @notes[kind],
-          atari: 0,
-          level: 1, # TODO: Place in highest level
-          kind: kind)
+        @idioms[kind]=@card.new_idiom_from_arrays(kind, @rep, @notes)
       end
       unless @card.save_with_idioms(@idioms)
         logger.debug("Can not save object")

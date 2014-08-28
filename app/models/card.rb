@@ -5,7 +5,20 @@ class Card < ActiveRecord::Base
             -> { order 'kind' }, # This is a lambda expression (executed via .call)
             dependent: :destroy
 
+  # amoeba gem allows deep cloning (via amoeba_dup)
+  # NOTE: exclude_field and nullify doesn't work
+  # https://github.com/rocksolidwebdesign/amoeba/issues/36
+  amoeba do
+    enable
+    # exclude_field :dict_id
+    nullify :dict_id
+  end
+
   after_initialize do
+  end
+
+  def new_idiom_from_arrays(kind,reparr,notearr)
+    Idiom.make_new_idiom_from_arrays(kind,id,reparr,notearr)
   end
 
   def save_with_idioms(idioms)

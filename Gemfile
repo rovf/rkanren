@@ -28,6 +28,9 @@ gem 'random_password_generator', '1.0.0'
 # Savely store passwords etc. on Github / Heroku
 gem 'figaro', '0.7.0'  # 'figaro install' needed afterwards
 
+# Gem for deep cloning
+gem 'amoeba', '2.0.0'
+
 # In order to use Heroku for deploying to production, we need Postgres
 group :production do
   gem 'pg', '0.15.1'

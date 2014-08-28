@@ -23,24 +23,31 @@ class UploadController < ApplicationController
   #  dict_id : the dictionary which receives the new idioms
   #  id : the dictionary where the new idioms come from
   #  duplicates : What to do with duplicate terms. Only "ignore"
-  # and "overwrite" are permitted.
+  #            and "overwrite" are permitted.
+  #  proceed : If this key is present, import should be performed
+  #  cancel : If this key is present, the user decided to cancel the operation
   def import_dict
       with_verified_dict(params[:dict_id],root_path) do |target_dict|
-        @dict=target_dict
-        source_dict=Dict.find_by_id(params[:id])
-        if source_dict.nil?
-          flash[:error]="The selected directory does not exist anymore"
-          redirect_to dict_select_for_import_path(target_dict.id)
-        elsif source_dict.world_readable or source_dict.user_id == current_user_id
-          duplicates_treatment=(params[:duplicates]||'reject').to_sym
-          # No need to do a transaction here. If import aborts for whatever reason,
-          # the user can simply rerun it. Reason:
-
-          flash[:error]="Not implemente yet 小麦"
+        if params.has_key?(:cancel)
+          flash[:notice]="Nothing imported, because you have decided to cancel the operation"
           redirect_to dict_select_for_import_path(target_dict.id)
         else
-          logger.warn("Someone is trying to steal a dictionary! current user = #{current_user_id}")
-          redirect_to root_path
+          @dict=target_dict
+          source_dict=Dict.find_by_id(params[:id])
+          if source_dict.nil?
+            flash[:error]="The selected directory does not exist anymore"
+            redirect_to dict_select_for_import_path(target_dict.id)
+          elsif source_dict.world_readable or source_dict.user_id == current_user_id
+            duplicates_treatment=(params[:duplicates]||'reject').to_sym
+            # No need to do a transaction here. If import aborts for whatever reason,
+            # the user can simply rerun it.
+            dict_merge(target_dict,source_dict,duplicates_treatment)
+            flash[:error]="Not implemente yet 小麦"
+            redirect_to dict_select_for_import_path(target_dict.id)
+          else
+            logger.warn("Someone is trying to steal a dictionary! current user = #{current_user_id}")
+            redirect_to root_path
+          end
         end
       end
   end
@@ -211,6 +218,44 @@ private
     "Error in line #{tempf.lineno} of uploaded dictionary file:\n"+errmsg unless errmsg.nil?
 
     errmsg
+  end
+
+  def dict_merge(from_dir,into_dir,duplicates_treatment)
+    # As a backup, duplicates are stored in a temporary dictionary
+    tempdict=nil
+    added=0
+    ignored=0
+    from_dir.cards.each do |c|
+      add_this_card=true
+      clashing=into_dir.clashing_with(c)
+      unless clashing.empty?
+        # We have overlapping definition
+        if duplicates_treatment == :overwrite
+          # Delete duplicates before adding new card
+          tempdict=Dict.tempdict(current_user) if tempdict.nil?
+          clashing.each do |cardid|
+            card_to_delete=Card.find_by_id(cardid)
+            card_to_delete.update_attributes!(dict_id: tempdict.id) unless card_to_delete.nil? or card_to_delete.dict_id == tempdict.id
+          end
+        else
+          logger.debug("dict_merge: ignore card #{c.id}, duplicate found at #{clashing.to_a}")
+          add_this_card=false
+          ignored += 1
+        end
+      end
+      if add_this_card
+        cloned_card=c.amoeba_dup
+        cloned_card.dict_id=into_dir.id
+        cloned_card.idioms.all do |idiom|
+          idiom.set_default_fields
+        end
+        logger.debug("++++++++ cloned card: "+cloned_card.inspect)
+        logger.debug("+++++++++ not implemented yet completely - upload_controller")
+        added += 1
+      end
+    end
+    # :deleted_duplicates is nil, if no cards have been deleted
+    {:deleted_duplicates => tempdict, :n_added => added, :n_ignored => ignored}
   end
 
   def temp_dict_merge(tempdict,targetdict)

@@ -22,7 +22,7 @@ class UniqueId < ActiveRecord::Base
   end
 
   def self.gen_tempdict_uid
-    generate('TEMPDICT','TEMP00000')
+    generate('TEMPDICT1','T00000')
   end
 
 private
