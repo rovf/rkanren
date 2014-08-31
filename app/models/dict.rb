@@ -46,6 +46,10 @@ class Dict < ActiveRecord::Base
     self[Dict.field_name_max_kind(kind)]
   end
 
+  def max_levels_for_new_idiom
+    Rkanren::KINDS.map { |kind| [max_level(kind),1] }
+  end
+
   def update_max_level!(kind,new_level)
     update_attributes!(Dict.field_name_max_kind(kind) => new_level)
   end
@@ -56,7 +60,7 @@ class Dict < ActiveRecord::Base
     result=Set.new # no require 'set' needed (already included)
     card_idioms=card.idioms
     Rkanren::KINDS.each do |k|
-      result.merge(idioms.where(kind: k, repres: card_idioms[k].repres).map { |idiom| idiom.card_id })
+      result.merge(idioms.where(kind: k, repres: card_idioms[k].repres).map { |idiom| idiom.card_id }) if card_idioms[k]
     end
     result
   end
@@ -78,12 +82,30 @@ class Dict < ActiveRecord::Base
         logger.debug("sanitize: Delete Dict ID "+d.id.to_s)
         d.destroy
         logger.error("sanitize: Destroy failed for Dict ID "+d.id.to_s) unless d.destroyed?
-      elsif d.user_id.blank?
-        d.user_id=User.guestid
-        updatep=true
-      elsif d.language.blank?
-        d.language='Steirisch'
-        updatep=true
+      end
+      unless d.destroyed?
+        if d.user_id.blank?
+          d.user_id=User.guestid
+          logger.debug("sanitize dictionary #{d.dictname}, assign to guest user")
+          updatep=true
+        end
+        if d.language.blank?
+          logger.debug("sanitize dictionary #{d.dictname} of user #{d.user.name}, assign language")
+          d.language='Steirisch'
+          updatep=true
+        end
+        if d.cards.exists?
+          Rkanren::KINDS.each do |k|
+            if d.max_level(k)==0 and d.has_kind?(k)
+              new_max_level=d.idioms.where(kind:k).map {|i| i.level}.max
+              if new_max_level > 0
+                d[Dict.field_name_max_kind(k)]=new_max_level
+                logger.debug("sanitize dictionary #{d.dictname} in language #{d.language}, set max level for #{Rkanren::KIND_TXT[k]} to #{new_max_level}")
+                updatep=true
+              end
+            end
+          end
+        end
       end
       if updatep
         logger.debug("sanitize: Update dictionary "+d.dictname)

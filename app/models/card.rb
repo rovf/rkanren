@@ -46,6 +46,7 @@ class Card < ActiveRecord::Base
         update_attributes!(usernote: new_usernote)
         new_nreps=new_reps[Rkanren::KANJI].length == 0 ? 2 : 3
         Idiom.transaction do
+          dict=Dict.find_by_id(self.dict_id)
           idiom_arr=idioms
           old_nreps=idiom_arr.length
           (new_nreps == old_nreps ? new_nreps : 2).times do |kind|
@@ -60,7 +61,7 @@ class Card < ActiveRecord::Base
               repres: new_reps[Rkanren::KANJI],
               card_id: idiom_arr[0].card_id,
               kind: Rkanren::KANJI,
-              level: initial_level,
+              level: initial_level(dict),
               atari: 0,
               note: new_notes[Rkanren::KANJI]).save!
           end

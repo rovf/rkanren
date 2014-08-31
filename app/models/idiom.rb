@@ -49,23 +49,34 @@ class Idiom < ActiveRecord::Base
     "#{level}/#{atari}"
   end
 
-  # Initial level for new idiom. This needs to be an instance method,
-  # because it will (eventually) depend on the enclosing dictionary.
-  def initial_level
-    1 # TODO: Place in highest level, not level 1
-    # i.e. Dict.find_by_id(....).max_level(self.kind)
+  # Initial level for new idiom. It is calculated for the
+  # dictionary where this Idiom belongs to. You can optionally
+  # supply your own dict object. There are two reasons, why you
+  # might want to do it:
+  # - Optimization (call this function for many idioms, where
+  #      you already know that they are in the same dict)
+  # - During copying (where the Idiom still "belongs" to the
+  #      source dict, but you want to calculate it for the
+  #      destination dict)
+  def initial_level(dict=nil)
+    [1,(dict or self.card.dict).max_level(self.kind)].max
   end
 
-  def set_default_fields
+  # dict_or_level can be either a dict object or a number.
+  # If it is a dict object:
+  # See the description of the method initial_level for the
+  # explanation of the dict parameter.
+  # If it is an integral number:
+  # It is the value for the initial level
+  def set_default_fields(dict_or_level=nil)
     self.atari=0
-    self.level=initial_level
+    self.level = dict_or_level.is_a?(Fixnum) ? dict_or_level : initial_level(dict_or_level)
     self.queried_time=nil
     self.last_queried_successful=false
     self
   end
 
   def self.make_new(kind,cid,rep,note='')
-    # TODO: Place in highest level, not level 1
     new_idiom=Idiom.new(repres: rep, card_id: cid, note: note, kind: kind)
     new_idiom.set_default_fields
   end

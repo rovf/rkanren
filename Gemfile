@@ -29,7 +29,8 @@ gem 'random_password_generator', '1.0.0'
 gem 'figaro', '0.7.0'  # 'figaro install' needed afterwards
 
 # Gem for deep cloning
-gem 'amoeba', '2.0.0'
+# gem 'amoeba', '2.0.0'
+gem 'amoeba', :git => 'git://github.com/rocksolidwebdesign/amoeba.git', :ref => '51c6fa6c37ab4864fa026e577eefb17316c49e1b'
 
 # In order to use Heroku for deploying to production, we need Postgres
 group :production do

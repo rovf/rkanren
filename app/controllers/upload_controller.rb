@@ -220,14 +220,15 @@ private
     errmsg
   end
 
-  def dict_merge(from_dir,into_dir,duplicates_treatment)
+  def dict_merge(from_dict,into_dict,duplicates_treatment)
     # As a backup, duplicates are stored in a temporary dictionary
     tempdict=nil
     added=0
     ignored=0
-    from_dir.cards.each do |c|
+    max_levels_for_new_idiom=nil
+    from_dict.cards.each do |c|
       add_this_card=true
-      clashing=into_dir.clashing_with(c)
+      clashing=into_dict.clashing_with(c)
       unless clashing.empty?
         # We have overlapping definition
         if duplicates_treatment == :overwrite
@@ -245,12 +246,13 @@ private
       end
       if add_this_card
         cloned_card=c.amoeba_dup
-        cloned_card.dict_id=into_dir.id
+        cloned_card.dict_id=into_dict.id
+        max_levels_for_new_idiom ||= into_dict.max_levels_for_new_idiom
         cloned_card.idioms.all do |idiom|
-          idiom.set_default_fields
+          idiom.set_default_fields(max_levels_for_new_idiom[idiom.kind])
         end
         logger.debug("++++++++ cloned card: "+cloned_card.inspect)
-        logger.debug("+++++++++ not implemented yet completely - upload_controller")
+        logger.debug("+++++++++ not implemented yet completely - upload_controller ... Need to save the cloned card")
         added += 1
       end
     end
