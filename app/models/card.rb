@@ -3,7 +3,7 @@ class Card < ActiveRecord::Base
 
   has_many  :idioms,
             -> { order 'kind' }, # This is a lambda expression (executed via .call)
-            dependent: :destroy
+            dependent: :destroy # , autosave: true, validate: true
 
   # amoeba gem allows deep cloning (via amoeba_dup)
   # NOTE: exclude_field and nullify doesn't work
@@ -18,7 +18,10 @@ class Card < ActiveRecord::Base
   end
 
   def new_idiom_from_arrays(kind,reparr,notearr)
-    Idiom.make_new_idiom_from_arrays(kind,id,reparr,notearr)
+    # Note: id might be nil, if the new card hasn't been saved yet. In this
+    # case, the card_id field of the new idiom won't be have a value yet
+    # either.
+    Idiom.make_new_idiom_from_arrays(kind, id, reparr, notearr, dict.max_levels_for_new_idiom)
   end
 
   def save_with_idioms(idioms)

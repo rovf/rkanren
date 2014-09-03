@@ -70,19 +70,26 @@ class Idiom < ActiveRecord::Base
   # It is the value for the initial level
   def set_default_fields(dict_or_level=nil)
     self.atari=0
-    self.level = dict_or_level.is_a?(Fixnum) ? dict_or_level : initial_level(dict_or_level)
+    unless dict_or_level.nil? and self.card_id.nil?
+      self.level = dict_or_level.is_a?(Fixnum) ? dict_or_level : initial_level(dict_or_level)
+    end
     self.queried_time=nil
     self.last_queried_successful=false
     self
   end
 
-  def self.make_new(kind,cid,rep,note='')
+  # Note: cid can also be nil. If both cid or newlevel are nil, the level field
+  # won't be set
+  def self.make_new(kind,cid,rep,note='',newlevel=nil)
     new_idiom=Idiom.new(repres: rep, card_id: cid, note: note, kind: kind)
-    new_idiom.set_default_fields
+    new_idiom.set_default_fields(newlevel) # If nil, level is taken from enclosing dict
   end
 
-  def self.make_new_idiom_from_arrays(kind,cid,reparr,notearr)
-    make_new(kind,cid,reparr[kind],notearr[kind])
+  # cid is either the id of the owning card, or nil (if the card has not
+  # been saved yet)
+  def self.make_new_idiom_from_arrays(kind, cid, reparr, notearr, newlevelarr=[nil]*Rkanren::NREPS)
+    logger.debug("++++++++++ make_new_idiom_from_arrays "+newlevelarr.inspect)
+    make_new(kind,cid,reparr[kind],notearr[kind],newlevelarr[kind])
   end
 
 end

@@ -47,7 +47,7 @@ class Dict < ActiveRecord::Base
   end
 
   def max_levels_for_new_idiom
-    Rkanren::KINDS.map { |kind| [max_level(kind),1] }
+    Rkanren::KINDS.map { |kind| [max_level(kind),1].max }
   end
 
   def update_max_level!(kind,new_level)

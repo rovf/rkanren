@@ -1,3 +1,6 @@
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p><div class="clear"></div>
+<% end %>
 <h2>Added to Dictionary <%= @curent_dictname %>:</h2>
 <% @rep.each do |r| %>
   <p class="show_rep"><%= r %></p>

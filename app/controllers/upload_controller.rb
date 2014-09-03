@@ -220,12 +220,13 @@ private
     errmsg
   end
 
-  def dict_merge(from_dict,into_dict,duplicates_treatment)
+  def dict_merge(into_dict,from_dict,duplicates_treatment)
     # As a backup, duplicates are stored in a temporary dictionary
     tempdict=nil
     added=0
     ignored=0
     max_levels_for_new_idiom=nil
+    logger.debug("++++++++++ dict_merge #{from_dict.cards.count} cards from #{from_dict.dictname} into #{into_dict.dictname}")
     from_dict.cards.each do |c|
       add_this_card=true
       clashing=into_dict.clashing_with(c)

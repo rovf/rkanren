@@ -2,6 +2,7 @@
 <p class="debug_dump debug_info"><%= __FILE__ %></p><div class="clear"></div>
 <% end %>
 
+<!-- dict_id is id of destination dictionary; id is source dictionary -->
 <%= form_tag({action: 'import_dict', dict_id: @dict.id, id: @from_dict.id}) do %>
 
 About to merge the content of of <%= @from_dict.dictname %>
