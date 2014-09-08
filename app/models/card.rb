@@ -24,19 +24,23 @@ class Card < ActiveRecord::Base
     Idiom.make_new_idiom_from_arrays(kind, id, reparr, notearr, dict.max_levels_for_new_idiom)
   end
 
-  def save_with_idioms(idioms)
+  def save_with_idioms(idiom_array=nil)
     saved=true
+    idiom_array=self.idioms.to_a if idiom_array.nil?
     begin
       transaction do
         Idiom.transaction do
+          logger.debug("saving card")
           save!
-          idioms.each do |i|
+          idiom_array.each do |i|
+            logger.debug("saving idiom "+Rkanren::KIND_TXT[i.kind])
             i.card_id=id
             i.save!
           end
         end
       end
-    rescue
+    rescue Exception => e
+      logger.debug("EXCEPTION in save_with_idioms: #{e.message}")
       saved=false
     end
     saved

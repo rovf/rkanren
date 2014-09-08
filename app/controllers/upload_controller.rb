@@ -253,7 +253,9 @@ private
           idiom.set_default_fields(max_levels_for_new_idiom[idiom.kind])
         end
         logger.debug("++++++++ cloned card: "+cloned_card.inspect)
-        logger.debug("+++++++++ not implemented yet completely - upload_controller ... Need to save the cloned card")
+        # cloned_card.save_with_idioms
+        logger.debug("+++++++ TODO: handle return value from save_with_idioms")
+        logger.debug("+++++++++ not tested yet completely - upload_controller ...  save the cloned card")
         added += 1
       end
     end
