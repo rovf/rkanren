@@ -3,6 +3,7 @@ class Card < ActiveRecord::Base
 
   has_many  :idioms,
             -> { order 'kind' }, # This is a lambda expression (executed via .call)
+            inverse_of: :card, # Needed for Amoeba when saving a cloned card. Singular form needed!
             dependent: :destroy # , autosave: true, validate: true
 
   # amoeba gem allows deep cloning (via amoeba_dup)

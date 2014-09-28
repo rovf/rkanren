@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
   resources :dicts do
     get :select_for_import  # Nested. ID will be passed as :dict_id
+    get :import_show_result
     resources :cards
     resources :upload, only: [:index] do
       member do

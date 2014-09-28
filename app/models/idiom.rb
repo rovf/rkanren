@@ -1,5 +1,8 @@
 class Idiom < ActiveRecord::Base
-  belongs_to :card
+
+  # inverse_of is needed, so that amoeba can save the card with the idioms.
+  # We use the plural form, idioms, because one card has many idioms.
+  belongs_to :card, inverse_of: :idioms
 
   # Card must exist before Idiom can be created. Will this
   # always be the case? Otherwise we just can validate the
@@ -10,6 +13,7 @@ class Idiom < ActiveRecord::Base
   # because it must be unique only within a dictionary.
   # Maybe we can say "uniqueness: { scope: .... }"
   # But the scope would not be the enclosing card, but the dict.
+  # In effecit, dict id plus repres must be unique.
   # Also, we need to put "kind" into consideration.
   # For setting the unique index, see:
   #  http://apidock.com/rails/ActiveRecord/ConnectionAdapters/SchemaStatements/add_index#note_info-953

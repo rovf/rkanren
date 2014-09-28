@@ -249,29 +249,44 @@ $button_color_inner: red;
   line-height: 0;
 }
 
-.alert-error {
-  color: red;
-  background-color:  #144213;
-  font-size: 75%;
-}
-
-.alert-success {
-  color: #2dbc13;
-  padding: 1px 0 2px 1px;
-  font-size: 75%;
-  font-weight: lighter;
-  font-style: oblique;
+@mixin border_around_text($color,$borderwidth:2px) {
   span {
     display: inline-flex;
     border-style: ridge;
-    border-width: 2px;
-    border-color: #ae6733;
+    border-width: $borderwidth;
+    border-color: $color;
     padding-right: 3px;
   }
 }
 
+@mixin alert_common {
+  font-size: 75%;
+}
+
+.alert-error {
+  @include alert_common;
+  @include border_around_text(#ae6733);
+  color: red;
+  background-color:  #144213;
+}
+
+.alert-warning {
+  @include alert_common;
+  @include border_around_text(#34573d,3px);
+  color: #55c52d;
+}
+
+.alert-success {
+  @include alert_common;
+  color: #2dbc13;
+  padding: 1px 0 2px 1px;
+  font-weight: lighter;
+  font-style: oblique;
+}
+
 .alert-notice {
   color: #e472c9;
+  @include alert_common;
 }
 
 .explain {

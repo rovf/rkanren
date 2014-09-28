@@ -41,9 +41,23 @@ class UploadController < ApplicationController
             duplicates_treatment=(params[:duplicates]||'reject').to_sym
             # No need to do a transaction here. If import aborts for whatever reason,
             # the user can simply rerun it.
-            dict_merge(target_dict,source_dict,duplicates_treatment)
-            flash[:error]="Not implemente yet 小麦"
-            redirect_to dict_select_for_import_path(target_dict.id)
+            @merge_status = dict_merge(target_dict,source_dict,duplicates_treatment)
+            if @merge_status[:n_added] == 0 && @merge_status[:n_errors] == 0
+              # Imported dictionary empty, or maybe only entries which are
+              # already present. Let user choose a different dictionary.
+              flash[:warning]="Dictionary does not contain anything which can be imported."
+              redirect_to dict_select_for_import_path(target_dict.id)
+            else
+              if @merge_status[:n_errors] > 0
+                flash[:error] =
+                  "Dictionary merge was " +
+                  (@merge_status[:n_added] == 0 ? "not" : "only partially")+
+                  " successful"
+              else
+                flash[:success] = "Dictionary imported"
+              end
+              redirect_to dict_import_show_result_path(target_dict.id)
+            end
           else
             logger.warn("Someone is trying to steal a dictionary! current user = #{current_user_id}")
             redirect_to root_path
@@ -225,6 +239,8 @@ private
     tempdict=nil
     added=0
     ignored=0
+    with_errors=0
+    errmsg=''
     max_levels_for_new_idiom=nil
     logger.debug("++++++++++ dict_merge #{from_dict.cards.count} cards from #{from_dict.dictname} into #{into_dict.dictname}")
     from_dict.cards.each do |c|
@@ -252,15 +268,24 @@ private
         cloned_card.idioms.all do |idiom|
           idiom.set_default_fields(max_levels_for_new_idiom[idiom.kind])
         end
-        logger.debug("++++++++ cloned card: "+cloned_card.inspect)
-        # cloned_card.save_with_idioms
-        logger.debug("+++++++ TODO: handle return value from save_with_idioms")
-        logger.debug("+++++++++ not tested yet completely - upload_controller ...  save the cloned card")
-        added += 1
-      end
+        if cloned_card.save
+          added += 1
+        else
+          with_errors += 1
+          ignored += 1
+          errmsg += "Error #{with_errors} - '#{cloned_card.idioms[Rkanren::GAIGO]}'"
+          ([cloned_card]+cloned_card.idioms.to_a).each do |record|
+            errmsg += "\n"+record.errors.full_messages.to_sentence if record.errors
+          end
+        end
+      end # add_this_card
     end
     # :deleted_duplicates is nil, if no cards have been deleted
-    {:deleted_duplicates => tempdict, :n_added => added, :n_ignored => ignored}
+    { :deleted_duplicates => tempdict,
+      :n_added => added,
+      :n_ignored => ignored,
+      :n_errors => with_errors,
+      :errorstring => errmsg }
   end
 
   def temp_dict_merge(tempdict,targetdict)
