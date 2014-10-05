@@ -56,7 +56,14 @@ class UploadController < ApplicationController
               else
                 flash[:success] = "Dictionary imported"
               end
-              redirect_to dict_import_show_result_path(target_dict.id)
+              # @merge_status contains result of Upload
+              # TODO: But the view doesn't know the controller
+              #       object and hence can't access the controller's
+              #       data.
+              @dict=target_dict
+              logger.debug("########## "+@merge_status.inspect)
+              render 'import_show_result'
+              # redirect_to dict_import_show_result_path(target_dict.id)
             end
           else
             logger.warn("Someone is trying to steal a dictionary! current user = #{current_user_id}")

@@ -62,6 +62,7 @@ class CardsController < ApplicationController
     # Starting with Rails 4, pluck can even be used to select more
     # than one column.
     @dict||=Dict.find(params[:dict_id])
+    logger.debug("++++++++++ cards_controller::index card ids in dictionary: "+@dict.card_ids.to_s)
     @idiom_index_list=@dict.card_ids.map do |cid|
       # find raises exception, if Object has been deleted in
       # between. find_by_.... returns nil in this case.
@@ -71,7 +72,11 @@ class CardsController < ApplicationController
         # 'where' returns array
         iarr=Idiom.where(card_id: cid, kind: Rkanren::GAIGO)
         if iarr.length > 0
+          logger.debug("+++++++++ card with id #{cid} contains idiom")
           result={:card_id => cid, :gaigo => iarr[0].repres}
+        else
+          logger.warn("WARNING! cards_controller::index card id = #{cid} idiom array empty! Sanitizing.....")
+          Card.destroy(cid)
         end
       end
       result
@@ -80,7 +85,7 @@ class CardsController < ApplicationController
       flash[:notice]='The Dictionary is empty'
       redirect_to dict_url(@dict.id)
     else
-      logger.debug("index list:\n"+@idiom_index_list.inspect)
+      logger.debug("cards_controller::index index list:\n"+@idiom_index_list.inspect)
     end
   end
 

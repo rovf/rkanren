@@ -1,0 +1,15 @@
+<% if Rails.env.development?%>
+<p class="debug_dump debug_info"><%= __FILE__ %></p><div class="clear"></div>
+<% end %>
+
+<% unless @merge_status[:deleted_duplicates].nil? %>
+  Deleted duplicates are saved in dictionary <%= @merge_status[:deleted_duplicates] %> <br>
+<% end %>
+<%= pluralize(@merge_status[:n_added],'entry') %> added.<br>
+<%= pluralize(@merge_status[:n_ignored],'entry') %> ignored.<br>
+<%= pluralize(@merge_status[:n_added],'entry') %> causing a problem.<br>
+<%= @merge_status[:errorstring] %> <br>
+
+<hr class="kanren_hr">
+
+<%= link_to "Go to control center for dictionary #{@dict.dictname}",      dict_path(@dict.id), class: "pseudo_button" %>
